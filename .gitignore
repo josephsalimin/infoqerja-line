@@ -1,0 +1,9 @@
+# Application specific
+.env
+
+# IDE config
+.vscode
+.idea
+
+bin/*
+!bin/.gitkeep
