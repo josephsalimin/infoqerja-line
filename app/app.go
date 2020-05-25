@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	configService, err := config.ReadConfig(nil)
+	configService, err := config.ReadConfig(&config.EnvReader{})
 
 	if err != nil {
 		log.Fatal(err)

@@ -5,5 +5,9 @@
 .vscode
 .idea
 
+# Coverage
+coverage.txt
+
+# Output folder
 bin/*
 !bin/.gitkeep

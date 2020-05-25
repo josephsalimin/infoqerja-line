@@ -80,10 +80,6 @@ func (r *EnvReader) Decode() (*Config, error) {
 
 // ReadConfig read configuration file and return Service
 func ReadConfig(reader Reader) (*Service, error) {
-	if reader == nil {
-		reader = &EnvReader{}
-	}
-
 	service := &Service{
 		reader: reader,
 		config: nil,

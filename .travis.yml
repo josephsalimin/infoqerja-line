@@ -1,12 +1,12 @@
 language: go
 go:
-  - 1.14.3
+- 1.14.3
 dist: xenial
 os: linux
-
 script:
-  - go test -v ./...
-
+- go test -v ./...
+after_success:
+- bash <(curl -s https://codecov.io/bash)
 deploy:
   strategy: api
   provider: heroku
@@ -16,3 +16,6 @@ deploy:
   on:
     repo: josephsalimin/infoqerja-line
     branch: master
+env:
+  global:
+    secure: uC/jQN+Y6GS0zGYRtCgJGS3ju0ZoxSU9KIbXad2UX4LgP+LPB+qU5RO0TRhjg7SlPSlkp6/meq7YOWHirc2BmdgroYhXX9t7W4cCJ3DPma2cRtVZd/DQi8bjLzH5Zw6UjBOv6G8hPYoQ9AKcuJynF1ozkjJYk5SgnncaVpqSu26ApNDwuznz+t2Y0foA/2ShnClBWO0R1hX8slvlcnHpOrtzVuMENFab4UJu8xfoy/kMKEqDxNg4G8CuuocEX0ETw2tlhQHSUq2abJR6gOJ16pZPXX2TILoybBLGzLR7yM3mlJ8VxpugZ1dLSfsgG0D1BN8cDA1TwjK4o1IF1NdPzGdrYzxIsk7+GfkaKO4HVklCSy9MhOEZ4y9MDG5brGl269O+0Hg62PIsW+1rRBK2r9TA24eA8xKK3uOzA7mFTO73DwGx8cyY9elm2XzjrWdxMvejPZsFrjCIDu3Zew26vVPTcQ7KwqQBx7MePmhakh6GRMOCESJzzm8z3bNJOH91Y67dI45Dr1NAiU4ai3iZX8TMJ1MviFrqLp5UV+z3hZb5w3U0oVpKJqKPQYy2gwYA7N/Sy9N9ipGYv0aOqto1Z+X9I6VkDYQbbOsXzWR6Z+TzT7T3evoQt0vCWZLw1/YVqdXsnGKxe3oDUlPv4Mhy2KDw49Viv0BGf6znkBYcqfM=
