@@ -1,10 +1,14 @@
 language: go
 go:
   - 1.14.3
+dist: xenial
+os: linux
 
 script:
   - go test -v ./...
+
 deploy:
+  strategy: api
   provider: heroku
   api_key:
     secure: LV8PcqeUqJ0M0LKqY4R/DraKekhc+Whx+P/iMpwtzq+Skd+yc5eOhbo0oooAj/nistu2ZeGZiaNGHJfCAiJpByNXmipajBe0WteBzbhFJZA8d2NaVz4nytNFoy5ztXtRJ5z4bb80p7ZmOzZgw3V/N+3FMsxwwIccWmF0eSSCOaOQxyejybKE9GOqhaYdp8vZ3BZl2dXduO9FHU7K9YLwMJabhNjIg4zMYhfbJXigE6BI5yeEv5OaeAohELrsEkg2KtuewChXdRJfyExH+yPVCY/t7BJhK/y21f2NWU8oyZ0ee67Eav8WyT8EGqYciqy7Q45ZGhvColmjAzkREodipkCIHtMiLlqGF4eAeg5MK6ObtIeYaErycmWtXd7vSF21o3w6WBUJ4FLMlGClWagWExhWgZPepm/bymlHhzCnipWtPMhoOs1BeVMuVES2WHpbBOZwI1ifzdW/n2TTHP9igwzrUhg679upjok4h2XTaAG7JSbcwWpumKbomkFKEpUhZb27j2N1l9BglpDkvA5FGFoawCMnGDqzUG9+wtHv5VmrR9m6Nh+IhC8aOiTYIQQpLqES3gKNdBlBKP6iVt0EXQn5Umm+LsqbNdcN3JBdyVmsNtea5mCai0GLAnXZ9WW+sRct6v8+ZVYtnM1SL31V1diNBjxz83CGKXL4vEqKpzU=
@@ -12,4 +16,3 @@ deploy:
   on:
     repo: josephsalimin/infoqerja-line
     branch: master
-  skip_cleanup: 'true'
