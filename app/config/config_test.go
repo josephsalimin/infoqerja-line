@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -78,4 +79,22 @@ func TestReadConfigDecodeFail(t *testing.T) {
 
 	assert.Error(err, "Error Decode")
 	assert.Nil(config)
+}
+
+func TestConfigHook(t *testing.T) {
+	assert := assert.New(t)
+
+	input, expectedOutput := "5", 5
+	output, _ := configHook(reflect.TypeOf(input), reflect.TypeOf(expectedOutput), input)
+
+	assert.Equal(output, expectedOutput)
+}
+
+func TestConfigHookNotChanged(t *testing.T) {
+	assert := assert.New(t)
+
+	input, expectedOutput := "5", "5"
+	output, _ := configHook(reflect.TypeOf(input), reflect.TypeOf(expectedOutput), input)
+
+	assert.Equal(output, "5")
 }
