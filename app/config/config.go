@@ -10,8 +10,10 @@ import (
 
 // Config is configuration data used by application
 type Config struct {
-	Host string `mapstructure:"HOST"`
-	Port int    `mapstructure:"PORT"`
+	Host          string `mapstructure:"HOST"`
+	Port          int    `mapstructure:"PORT"`
+	ChannelSecret string `mapstructure:"CHANNEL_SECRET"`
+	ChannelToken  string `mapstructure:"CHANNEL_TOKEN"`
 }
 
 // Reader is interface for global application config
