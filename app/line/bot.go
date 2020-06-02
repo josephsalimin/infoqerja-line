@@ -1,4 +1,4 @@
-package bot
+package line
 
 import (
 	"infoqerja-line/app/config"
@@ -7,14 +7,14 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
-// LineBotService mimics line-bot-sdk-go Client
-type LineBotService interface {
+// BotClient mimics line-bot-sdk-go Client
+type BotClient interface {
 	ParseRequest(r *http.Request) ([]*linebot.Event, error)
-	ReplyMessage(replyToken string, messages ...linebot.SendingMessage) LineBotPushMessageCall
+	ReplyMessage(replyToken string, messages ...linebot.SendingMessage) BotPushMessageCall
 }
 
-// LineBotPushMessageCall mimics line-bot-sdk-go ReplyMessageCall
-type LineBotPushMessageCall interface {
+// BotPushMessageCall mimics line-bot-sdk-go ReplyMessageCall
+type BotPushMessageCall interface {
 	Do() (*linebot.BasicResponse, error)
 }
 
@@ -29,12 +29,12 @@ func (iqb InfoQerjaBot) ParseRequest(r *http.Request) ([]*linebot.Event, error) 
 }
 
 // ReplyMessage will call line-bot-sdk-go client's ReplyMessage
-func (iqb InfoQerjaBot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) LineBotPushMessageCall {
+func (iqb InfoQerjaBot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) BotPushMessageCall {
 	return iqb.bot.ReplyMessage(replyToken, messages...)
 }
 
-// InitializeLineBot initiate line-bot-sdk-go client
-func InitializeLineBot(config config.Config) (LineBotService, error) {
+// InitializeBot initiate line-bot-sdk-go client
+func InitializeBot(config config.Config) (BotClient, error) {
 	bot, err := linebot.New(
 		config.ChannelSecret,
 		config.ChannelToken,

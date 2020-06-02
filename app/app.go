@@ -1,8 +1,8 @@
 package main
 
 import (
-	"infoqerja-line/app/bot"
 	"infoqerja-line/app/config"
+	"infoqerja-line/app/line"
 	"log"
 	"net/http"
 	"os"
@@ -21,8 +21,8 @@ func initializeConfig() *config.Service {
 	return configService
 }
 
-func initializeBot(config config.Config) bot.LineBotService {
-	bot, err := bot.InitializeLineBot(config)
+func initializeLineBot(config config.Config) line.BotClient {
+	bot, err := line.InitializeBot(config)
 
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +34,7 @@ func initializeBot(config config.Config) bot.LineBotService {
 func main() {
 	configService := initializeConfig()
 	config := *configService.GetConfig()
-	bot := initializeBot(config)
+	bot := initializeLineBot(config)
 
 	addr := config.Host + ":" + strconv.Itoa(config.Port)
 

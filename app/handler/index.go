@@ -7,7 +7,12 @@ import (
 
 // IndexHandler will handle all request match the URL
 type IndexHandler struct {
-	Config iqc.Config
+	config iqc.Config
+}
+
+// BuildIndexHandler return IndexHandler struct
+func BuildIndexHandler(config iqc.Config) *IndexHandler {
+	return &IndexHandler{config: config}
 }
 
 // Welcome is index page
