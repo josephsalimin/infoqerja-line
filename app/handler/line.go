@@ -54,8 +54,10 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 				} else {
-					if err = h.UnknownHandler(event.ReplyToken); err != nil {
-						log.Print(err)
+					if event.Source.Type == linebot.EventSourceTypeUser {
+						if err = h.UnknownHandler(event.ReplyToken); err != nil {
+							log.Print(err)
+						}
 					}
 				}
 			}
