@@ -5,7 +5,6 @@ import (
 	iql "infoqerja-line/app/line"
 	"log"
 	"net/http"
-	"regexp"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -42,27 +41,30 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 
-				if checkCommand(message.Text) {
-					if _, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("This is a command")).Do(); err != nil {
-						log.Print(err)
+				if IsValidCommand(message.Text) {
+					command := CheckCommand(message.Text)
+					switch command {
+					case "help":
+						if err = h.HelpCommand(event.ReplyToken); err != nil {
+							log.Print(err)
+						}
+					default:
+						if err = h.InvalidCommand(event.ReplyToken); err != nil {
+							log.Print(err)
+						}
 					}
 				} else {
-					if _, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+					if err = h.UnknownHandler(event.ReplyToken); err != nil {
 						log.Print(err)
 					}
 				}
 			}
 		}
+
+		if event.Type == linebot.EventTypeFollow {
+			if err = h.WelcomeHandler(event.ReplyToken); err != nil {
+				log.Print(err)
+			}
+		}
 	}
 }
-
-func checkCommand(message string) bool {
-	re := regexp.MustCompile("^!")
-	return re.FindString(message) != ""
-}
-
-// handle !help
-
-// handle !view
-
-// handle !add
