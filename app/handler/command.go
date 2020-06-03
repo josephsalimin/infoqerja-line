@@ -56,6 +56,12 @@ func (h LineBotHandler) InvalidCommand(token string) error {
 	return err
 }
 
+// UnknownHandler : Respond to any unknown request
+func (h LineBotHandler) UnknownHandler(token string) error {
+	_, err := h.bot.ReplyMessage(token, linebot.NewTextMessage(unknownMessage)).Do()
+	return err
+}
+
 // WelcomeHandler : Respond to follow event
 func (h LineBotHandler) WelcomeHandler(token string) error {
 	_, err := h.bot.ReplyMessage(token, linebot.NewTextMessage(welcomeMessage+"\n"+helpMessage)).Do()
