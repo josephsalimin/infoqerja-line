@@ -5,6 +5,7 @@ import (
 	iql "infoqerja-line/app/line"
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -40,10 +41,28 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if _, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-					log.Print(err)
+
+				if checkCommand(message.Text) {
+					if _, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("This is a command")).Do(); err != nil {
+						log.Print(err)
+					}
+				} else {
+					if _, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
 			}
 		}
 	}
 }
+
+func checkCommand(message string) bool {
+	re := regexp.MustCompile("^!")
+	return re.FindString(message) != ""
+}
+
+// handle !help
+
+// handle !view
+
+// handle !add
