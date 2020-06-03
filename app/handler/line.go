@@ -53,10 +53,6 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 							log.Print(err)
 						}
 					}
-				} else {
-					if err = h.UnknownHandler(event.ReplyToken); err != nil {
-						log.Print(err)
-					}
 				}
 			}
 		}
