@@ -56,8 +56,7 @@ func (handler *IncomingInvalid) Reply(token string) error {
 
 // Reply : Method service for IncomingUnknown instance
 func (handler *IncomingUnknown) Reply(token string) error {
-	_, err := handler.Bot.ReplyMessage(token, linebot.NewStickerMessage("11539", "52114146")).Do()
-	_, err = handler.Bot.ReplyMessage(token, linebot.NewTextMessage(unknownMessage)).Do()
+	_, err := handler.Bot.ReplyMessage(token, linebot.NewStickerMessage("11539", "52114146"), linebot.NewTextMessage(unknownMessage)).Do()
 	return err
 }
 

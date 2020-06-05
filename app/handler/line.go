@@ -5,6 +5,8 @@ import (
 	iql "infoqerja-line/app/line"
 	"log"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -88,9 +90,19 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if event.Type == linebot.EventTypeFollow {
-			if err = h.WelcomeHandler(event.ReplyToken); err != nil {
-				log.Print(err)
-			}
+			// add welcome handler
 		}
 	}
+}
+
+// IsValidCommand : Function to check wether user inputs is a command or not
+func IsValidCommand(message string) bool {
+	re := regexp.MustCompile("^!")
+	return re.FindString(message) != ""
+}
+
+// CheckCommand : get the type of command from user inputs
+func CheckCommand(command string) string {
+	co := strings.TrimSpace(command)
+	return co[1:]
 }
