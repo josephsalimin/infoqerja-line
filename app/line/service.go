@@ -2,17 +2,17 @@ package line
 
 import "github.com/line/line-bot-sdk-go/linebot"
 
-const welcomeMessage = `Welcome to the InfoQerja Bot!!!💻💻`
+const welcomeMessage = `Welcome to the _InfoQerja Bot!!!_💻💻`
 const helpMessage = `Use command below to use InfoQerja functionality:
-- !help		: to find out how to use InfoQerja
-- !add		: to add job posting to InfoQerja
-- !show		: to show job posting in InfoQerja
+- *!help*		: to find out how to use InfoQerja
+- *!add*		: to add job posting to InfoQerja
+- *!show*		: to show job posting in InfoQerja
 `
 
-const invalidMessage = `Please enter a valid command!! Refer to !help for available command.`
+const invalidMessage = `Please enter a valid command!! Refer to *!help* for available command.`
 
 const unknownMessage = `This bot does not respond to other things except for command!! 😎😎
-Please refer to !help command to use InfoQerja functionality.
+Please refer to *!help* command to use InfoQerja functionality.
 Hope you enjoy this bot !!😊😊
 - Joseph Salimin 😍
 `
