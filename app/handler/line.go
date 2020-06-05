@@ -45,17 +45,41 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					command := CheckCommand(message.Text)
 					switch command {
 					case "help":
-						if err = h.HelpCommand(event.ReplyToken); err != nil {
+						service := &iql.IncomingHelp{
+							Bot: h.bot,
+						}
+
+						incomingHandler := &iql.IncomingAction{
+							Replier: service,
+						}
+
+						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
 							log.Print(err)
 						}
 					default:
-						if err = h.InvalidCommand(event.ReplyToken); err != nil {
+						service := &iql.IncomingInvalid{
+							Bot: h.bot,
+						}
+
+						incomingHandler := &iql.IncomingAction{
+							Replier: service,
+						}
+
+						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
 							log.Print(err)
 						}
 					}
 				} else {
 					if event.Source.Type == linebot.EventSourceTypeUser {
-						if err = h.UnknownHandler(event.ReplyToken); err != nil {
+						service := &iql.IncomingUnknown{
+							Bot: h.bot,
+						}
+
+						incomingHandler := &iql.IncomingAction{
+							Replier: service,
+						}
+
+						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
 							log.Print(err)
 						}
 					}
