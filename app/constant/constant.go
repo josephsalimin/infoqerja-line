@@ -11,7 +11,7 @@ const (
 	WelcomeMessage = `Welcome to the InfoQerja Bot!!!💻💻`
 
 	// InvalidMessage : Constant for invalid message
-	InvalidMessage = `Welcome to the InfoQerja Bot!!!💻💻`
+	InvalidMessage = `Please enter a valid command!! Refer to !help for available command.`
 
 	// UnknownMessage : Constant for unknown message
 	UnknownMessage = `This bot does not respond to other things except for command!! 😎😎
