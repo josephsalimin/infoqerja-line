@@ -17,7 +17,7 @@ func (handler *IncomingHelp) Reply(bot BotClient, token string) error {
 
 // GetHelpReplyMessage : A function to get help reply message
 func GetHelpReplyMessage() string {
-	message, err := GetMessageFromFile("message/help.txt")
+	message, err := GetMessageFromFile("./message/help.txt")
 
 	if err != nil {
 		log.Print(err)

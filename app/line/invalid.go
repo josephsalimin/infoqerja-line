@@ -17,7 +17,7 @@ func (handler *IncomingInvalid) Reply(bot BotClient, token string) error {
 
 // GetInvalidReplyMessage : A function to get invalid reply message
 func GetInvalidReplyMessage() string {
-	message, err := GetMessageFromFile("message/invalid.txt")
+	message, err := GetMessageFromFile("./message/invalid.txt")
 
 	if err != nil {
 		log.Print(err)

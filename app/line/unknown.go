@@ -17,7 +17,7 @@ func (handler *IncomingUnknown) Reply(bot BotClient, token string) error {
 
 // GetUnknownReplyMessage : A function to get unknown reply message
 func GetUnknownReplyMessage() string {
-	message, err := GetMessageFromFile("message/unknown.txt")
+	message, err := GetMessageFromFile("./message/unknown.txt")
 
 	if err != nil {
 		log.Print(err)
