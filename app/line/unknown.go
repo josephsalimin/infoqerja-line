@@ -10,7 +10,7 @@ import (
 type IncomingUnknown struct{}
 
 // Reply : Method service for IncomingInvalid instance
-func (handler *IncomingInvalid) Reply(bot BotClient, token string) error {
+func (handler *IncomingUnknown) Reply(bot BotClient, token string) error {
 	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(invalidMessage)).Do()
 	return err
 }
