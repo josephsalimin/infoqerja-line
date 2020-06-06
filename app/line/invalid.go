@@ -1,7 +1,7 @@
 package line
 
 import (
-	"log"
+	"infoqerja-line/app/constant"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -11,17 +11,6 @@ type IncomingInvalid struct{}
 
 // Reply : Method service for IncomingInvalid instance
 func (handler *IncomingInvalid) Reply(bot BotClient, token string) error {
-	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(GetInvalidReplyMessage())).Do()
+	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(constant.InvalidMessage)).Do()
 	return err
-}
-
-// GetInvalidReplyMessage : A function to get invalid reply message
-func GetInvalidReplyMessage() string {
-	message, err := GetMessageFromFile("./message/invalid.txt")
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	return message
 }
