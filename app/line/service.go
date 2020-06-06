@@ -4,8 +4,6 @@ import (
 	"log"
 	"regexp"
 	"strings"
-
-	cmd "infoqerja-line/app/line/command"
 )
 
 // Command : Interface for Reply service
@@ -37,16 +35,16 @@ func HandleIncomingMessage(bot BotClient, message string) {
 		command := GetCommand(message)
 		switch command {
 		case "help":
-			if err := HandleCommand(&cmd.IncomingHelp{}, bot, token); err != nil {
+			if err := HandleCommand(&IncomingHelp{}, bot, token); err != nil {
 				log.Print(err)
 			}
 		default:
-			if err := HandleCommand(&cmd.IncomingInvalid{}, bot, token); err != nil {
+			if err := HandleCommand(&IncomingInvalid{}, bot, token); err != nil {
 				log.Print(err)
 			}
 		}
 	} else {
-		if err := HandleCommand(&cmd.IncomingUnknown{}, bot, token); err != nil {
+		if err := HandleCommand(&IncomingUnknown{}, bot, token); err != nil {
 			log.Print(err)
 		}
 	}
