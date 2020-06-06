@@ -1,0 +1,4 @@
+Use command below to use InfoQerja functionality:
+- !help		: to find out how to use InfoQerja
+- !add		: to add job posting to InfoQerja
+- !show		: to show job posting in InfoQerja

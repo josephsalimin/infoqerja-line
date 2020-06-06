@@ -1,66 +1,53 @@
 package line
 
-import "github.com/line/line-bot-sdk-go/linebot"
+import (
+	"log"
+	"regexp"
+	"strings"
 
-const welcomeMessage = `Welcome to the _InfoQerja Bot!!!_💻💻`
-const helpMessage = `Use command below to use InfoQerja functionality:
-- *!help*		: to find out how to use InfoQerja
-- *!add*		: to add job posting to InfoQerja
-- *!show*		: to show job posting in InfoQerja
-`
+	cmd "infoqerja-line/app/line/command"
+)
 
-const invalidMessage = `Please enter a valid command!! Refer to *!help* for available command.`
-
-const unknownMessage = `This bot does not respond to other things except for command!! 😎😎
-Please refer to *!help* command to use InfoQerja functionality.
-Hope you enjoy this bot !!😊😊
-- Joseph Salimin 😍
-`
-
-// Action : Interface for Reply service
-type Action interface {
-	Reply(token string) error
+// Command : Interface for Reply service
+type Command interface {
+	Reply(bot BotClient, token string) error
 }
 
-// IncomingAction : Instance for Handling Incoming Message
-type IncomingAction struct {
-	Replier Action
+// HandleCommand : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
+func HandleCommand(command Command, bot BotClient, token string) error {
+	// exec method
+	return command.Reply(bot, token)
 }
 
-// IncomingHelp :  Instance for handling help message
-type IncomingHelp struct {
-	Bot BotClient
+// IsValidCommand : Function to check wether user inputs is a command or not
+func IsValidCommand(message string) bool {
+	re := regexp.MustCompile("^!")
+	return re.FindString(message) != ""
 }
 
-// IncomingUnknown :  Instance for handling unknown message
-type IncomingUnknown struct {
-	Bot BotClient
+// GetCommand : get the type of command from user inputs
+func GetCommand(command string) string {
+	co := strings.TrimSpace(command)
+	return co[1:]
 }
 
-// IncomingInvalid :  Instance for handling invalid message
-type IncomingInvalid struct {
-	Bot BotClient
-}
-
-// Reply : Method service for IncomingHelp instance
-func (handler *IncomingHelp) Reply(token string) error {
-	_, err := handler.Bot.ReplyMessage(token, linebot.NewTextMessage(helpMessage)).Do()
-	return err
-}
-
-// Reply : Method service for IncomingInvalid instance
-func (handler *IncomingInvalid) Reply(token string) error {
-	_, err := handler.Bot.ReplyMessage(token, linebot.NewTextMessage(invalidMessage)).Do()
-	return err
-}
-
-// Reply : Method service for IncomingUnknown instance
-func (handler *IncomingUnknown) Reply(token string) error {
-	_, err := handler.Bot.ReplyMessage(token, linebot.NewStickerMessage("11539", "52114146"), linebot.NewTextMessage(unknownMessage)).Do()
-	return err
-}
-
-// HandleIncomingMessage : Method service for IncomingAction instance
-func (handler *IncomingAction) HandleIncomingMessage(token string) error {
-	return handler.Replier.Reply(token)
+// HandleIncomingMessage : Handler for any incoming event that based on EventTypeMessage
+func HandleIncomingMessage(bot BotClient, message string) {
+	if IsValidCommand(message) {
+		command := GetCommand(message)
+		switch command {
+		case "help":
+			if err := HandleCommand(&cmd.IncomingHelp{}, bot, token); err != nil {
+				log.Print(err)
+			}
+		default:
+			if err := HandleCommand(&cmd.IncomingInvalid{}, bot, token); err != nil {
+				log.Print(err)
+			}
+		}
+	} else {
+		if err := HandleCommand(&cmd.IncomingUnknown{}, bot, token); err != nil {
+			log.Print(err)
+		}
+	}
 }

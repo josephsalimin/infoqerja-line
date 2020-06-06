@@ -1,0 +1,4 @@
+This bot does not respond to other things except for command!!
+Please refer to !help command to use InfoQerja functionality.
+Hope you enjoy this bot !!
+- Joseph Salimin 

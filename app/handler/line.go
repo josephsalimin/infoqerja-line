@@ -3,10 +3,7 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	iql "infoqerja-line/app/line"
-	"log"
 	"net/http"
-	"regexp"
-	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -42,50 +39,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-
-				if IsValidCommand(message.Text) {
-					command := CheckCommand(message.Text)
-					switch command {
-					case "help":
-						service := &iql.IncomingHelp{
-							Bot: h.bot,
-						}
-
-						incomingHandler := &iql.IncomingAction{
-							Replier: service,
-						}
-
-						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					default:
-						service := &iql.IncomingInvalid{
-							Bot: h.bot,
-						}
-
-						incomingHandler := &iql.IncomingAction{
-							Replier: service,
-						}
-
-						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					}
-				} else {
-					if event.Source.Type == linebot.EventSourceTypeUser {
-						service := &iql.IncomingUnknown{
-							Bot: h.bot,
-						}
-
-						incomingHandler := &iql.IncomingAction{
-							Replier: service,
-						}
-
-						if err := incomingHandler.HandleIncomingMessage(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					}
-				}
+				HandleIncomingMessage(h.bot, event.ReplyToken)
 			}
 		}
 
@@ -93,16 +47,4 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			// add welcome handler
 		}
 	}
-}
-
-// IsValidCommand : Function to check wether user inputs is a command or not
-func IsValidCommand(message string) bool {
-	re := regexp.MustCompile("^!")
-	return re.FindString(message) != ""
-}
-
-// CheckCommand : get the type of command from user inputs
-func CheckCommand(command string) string {
-	co := strings.TrimSpace(command)
-	return co[1:]
 }
