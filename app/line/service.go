@@ -30,7 +30,7 @@ func GetCommand(command string) string {
 }
 
 // HandleIncomingMessage : Handler for any incoming event that based on EventTypeMessage
-func HandleIncomingMessage(bot BotClient, message string) {
+func HandleIncomingMessage(bot BotClient, token string, message string) {
 	if IsValidCommand(message) {
 		command := GetCommand(message)
 		switch command {

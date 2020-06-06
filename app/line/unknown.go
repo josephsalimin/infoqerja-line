@@ -11,7 +11,7 @@ type IncomingUnknown struct{}
 
 // Reply : Method service for IncomingInvalid instance
 func (handler *IncomingUnknown) Reply(bot BotClient, token string) error {
-	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(invalidMessage)).Do()
+	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(GetUnknownReplyMessage())).Do()
 	return err
 }
 

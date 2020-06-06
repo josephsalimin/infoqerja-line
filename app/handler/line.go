@@ -39,7 +39,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				HandleIncomingMessage(h.bot, event.ReplyToken)
+				HandleIncomingMessage(h.bot, event.ReplyToken, message.Text)
 			}
 		}
 
