@@ -37,6 +37,14 @@ func HandleIncomingMessage(bot iql.BotClient, token string, message string) {
 			if err := handler.HandleCommand(&service.IncomingHelp{}); err != nil {
 				log.Print(err)
 			}
+		case "add":
+			if err := handler.HandleCommand(&service.IncomingAdd{}); err != nil {
+				log.Print(err)
+			}
+		case "show":
+			if err := handler.HandleCommand(&service.IncomingShow{}); err != nil {
+				log.Print(err)
+			}
 		default:
 			// inject invalid service to the client handler
 			if err := handler.HandleCommand(&service.IncomingInvalid{}); err != nil {

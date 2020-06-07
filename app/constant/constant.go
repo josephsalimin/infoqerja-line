@@ -19,4 +19,9 @@ const (
 	Hope you enjoy this bot !!😊😊
 	- Joseph Salimin 😍
 	`
+	// AddMessage : Constant for add job message
+	AddMessage = `Please add a new job!!😍`
+
+	// ShowMessage : Constant for showing all job collected
+	ShowMessage = `Showing all job listing saved here 😎😎`
 )

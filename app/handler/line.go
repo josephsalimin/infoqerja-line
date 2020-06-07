@@ -42,7 +42,6 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				HandleIncomingMessage(h.bot, event.ReplyToken, message.Text)
 			}
 		}
-
 		if event.Type == linebot.EventTypeFollow {
 			// add welcome handler
 		}
