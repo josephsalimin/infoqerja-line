@@ -14,7 +14,8 @@ func (handler *IncomingAdd) Reply(bot iql.BotClient, token string) error {
 
 	template := linebot.NewButtonsTemplate(
 		"", "Adding Job!!", "Select job date deadline!",
-		linebot.NewDatetimePickerAction("date", "DATE", "date", "", "", ""),
+		linebot.NewDatetimePickerAction("Add Date !!", "DATE", "date", "", "", ""),
+		linebot.NewMessageAction("Say message", "Rice=米"),
 	)
 
 	_, err := bot.ReplyMessage(token, linebot.NewTemplateMessage("Date time picker alt text", template)).Do()

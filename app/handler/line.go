@@ -51,9 +51,9 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			data := event.Postback.Data
 
 			if data == "DATE" {
-				log.Printf("Successful getting data : (%v)", *event.Postback.Params)
+				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
 			}
-			HandleIncomingMessage(h.bot, event.ReplyToken, "!add")
+			HandleIncomingMessage(h.bot, event.ReplyToken, "!show")
 		}
 	}
 }
