@@ -2,6 +2,7 @@ package handler
 
 import (
 	iqc "infoqerja-line/app/config"
+	constant "infoqerja-line/app/constant"
 	iql "infoqerja-line/app/line"
 	"log"
 	"net/http"
@@ -37,30 +38,33 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, event := range events {
-		if event.Type == linebot.EventTypeMessage {
-			switch message := event.Message.(type) {
-			case *linebot.TextMessage:
-				service := &iql.MessageService{
-					Bot:   h.bot,
-					Token: event.ReplyToken,
-				}
-				iql.HandleIncomingMessage(*service, message.Text)
-			}
-		}
-		if event.Type == linebot.EventTypeFollow {
-			// add welcome handler
+		service := &iql.Service{
+			Bot:   h.bot,
+			Event: *event,
 		}
 
-		if event.Type == linebot.EventTypePostback {
-			data := event.Postback.Data
-			service := &iql.MessageService{
-				Bot:   h.bot,
-				Token: event.ReplyToken,
+		switch event.Type {
+		case linebot.EventTypeMessage:
+			switch message := event.Message.(type) {
+			case *linebot.TextMessage:
+				iql.HandleIncomingMessage(service, message.Text)
 			}
+		case linebot.EventTypeFollow:
+			// add welcome handler
+			iql.HandleIncomingMessage(service, constant.WelcomeCommandCode)
+		case linebot.EventTypeUnfollow:
+			// add welcome handler
+			iql.HandleIncomingMessage(service, constant.UnWelcomeCommandCode)
+		case linebot.EventTypeJoin:
+			iql.HandleIncomingMessage(service, constant.WelcomeCommandCode)
+		case linebot.EventTypeLeave:
+			iql.HandleIncomingMessage(service, constant.UnWelcomeCommandCode)
+		case linebot.EventTypePostback:
+			data := event.Postback.Data
 			if data == "DATE" {
 				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
 			}
-			iql.HandleIncomingMessage(*service, "!show")
+			iql.HandleIncomingMessage(service, "!show")
 		}
 	}
 }

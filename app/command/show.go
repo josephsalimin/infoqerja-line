@@ -11,5 +11,8 @@ type IncomingShow struct{}
 
 // GetMessage : Method service for IncomingHelp instance
 func (handler *IncomingShow) GetMessage() []linebot.SendingMessage {
+
+	// template : carousel
+
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.ShowMessage)}
 }

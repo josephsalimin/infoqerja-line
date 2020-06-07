@@ -1,8 +1,6 @@
 package command
 
 import (
-	"infoqerja-line/app/constant"
-
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
@@ -11,5 +9,12 @@ type IncomingHelp struct{}
 
 // GetMessage : Method service for IncomingHelp instance
 func (handler *IncomingHelp) GetMessage() []linebot.SendingMessage {
-	return []linebot.SendingMessage{linebot.NewTextMessage(constant.HelpMessage)}
+	template := linebot.NewButtonsTemplate(
+		"", "Help Menu", "Please click button below to refer to available command",
+		linebot.NewMessageAction("View Command", "!help"),
+		linebot.NewMessageAction("Add Job", "!add"),
+		linebot.NewMessageAction("Show Job", "!show"),
+	)
+
+	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version !!", template)}
 }

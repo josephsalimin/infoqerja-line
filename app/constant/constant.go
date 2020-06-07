@@ -24,4 +24,19 @@ const (
 
 	// ShowMessage : Constant for showing all job collected
 	ShowMessage = `Showing all job listing saved here 😎😎`
+
+	// WelcomeCommandCode : Constant for welcoming new user code
+	WelcomeCommandCode = "!welcome--"
+
+	// UnWelcomeCommandCode : Bye bye message command
+	UnWelcomeCommandCode = "!unwelcome--"
+
+	// ShowCommandCode : Command code for show service
+	ShowCommandCode = "!show"
+
+	// HelpCommandCode : Command code for help service
+	HelpCommandCode = "!help"
+
+	// AddCommandCode : Command code for add service
+	AddCommandCode = "!add"
 )

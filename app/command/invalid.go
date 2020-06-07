@@ -1,8 +1,6 @@
 package command
 
 import (
-	"infoqerja-line/app/constant"
-
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
@@ -11,5 +9,11 @@ type IncomingInvalid struct{}
 
 // GetMessage : Method service for IncomingInvalid instance
 func (handler *IncomingInvalid) GetMessage() []linebot.SendingMessage {
-	return []linebot.SendingMessage{linebot.NewTextMessage(constant.InvalidMessage)}
+
+	template := linebot.NewButtonsTemplate(
+		"", "Invalid Command", "Please click button below to refer to available command",
+		linebot.NewMessageAction("View Command", "!help"),
+	)
+
+	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version !!", template)}
 }
