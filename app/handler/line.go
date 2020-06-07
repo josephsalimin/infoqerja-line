@@ -40,7 +40,11 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				HandleIncomingMessage(h.bot, event.ReplyToken, message.Text)
+				service := &iql.MessageService{
+					Bot:   h.bot,
+					Token: event.ReplyToken,
+				}
+				iql.HandleIncomingMessage(*service, message.Text)
 			}
 		}
 		if event.Type == linebot.EventTypeFollow {
@@ -49,11 +53,14 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 
 		if event.Type == linebot.EventTypePostback {
 			data := event.Postback.Data
-
+			service := &iql.MessageService{
+				Bot:   h.bot,
+				Token: event.ReplyToken,
+			}
 			if data == "DATE" {
 				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
 			}
-			HandleIncomingMessage(h.bot, event.ReplyToken, "!show")
+			iql.HandleIncomingMessage(*service, "!show")
 		}
 	}
 }
