@@ -3,7 +3,6 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	iql "infoqerja-line/app/line"
-	"log"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -40,33 +39,11 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-
-				if IsValidCommand(message.Text) {
-					command := CheckCommand(message.Text)
-					switch command {
-					case "help":
-						if err = h.HelpCommand(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					default:
-						if err = h.InvalidCommand(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					}
-				} else {
-					if event.Source.Type == linebot.EventSourceTypeUser {
-						if err = h.UnknownHandler(event.ReplyToken); err != nil {
-							log.Print(err)
-						}
-					}
-				}
+				HandleIncomingMessage(h.bot, event.ReplyToken, message.Text)
 			}
 		}
-
 		if event.Type == linebot.EventTypeFollow {
-			if err = h.WelcomeHandler(event.ReplyToken); err != nil {
-				log.Print(err)
-			}
+			// add welcome handler
 		}
 	}
 }

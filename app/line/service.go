@@ -1,5 +1,0 @@
-package line
-
-func HandleIncomingMessage() {
-
-}
