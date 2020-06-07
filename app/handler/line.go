@@ -3,6 +3,7 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	iql "infoqerja-line/app/line"
+	"log"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -44,6 +45,15 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		}
 		if event.Type == linebot.EventTypeFollow {
 			// add welcome handler
+		}
+
+		if event.Type == linebot.EventTypePostback {
+			data := event.Postback.Data
+
+			if data == "DATE" {
+				log.Printf("Successful getting data : (%v)", *event.Postback.Params)
+			}
+			HandleIncomingMessage(h.bot, event.ReplyToken, "!add")
 		}
 	}
 }

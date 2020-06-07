@@ -13,10 +13,8 @@ type IncomingAdd struct{}
 func (handler *IncomingAdd) Reply(bot iql.BotClient, token string) error {
 
 	template := linebot.NewButtonsTemplate(
-		"", "", "Select date / time !",
+		"", "Adding Job!!", "Select job date deadline!",
 		linebot.NewDatetimePickerAction("date", "DATE", "date", "", "", ""),
-		linebot.NewDatetimePickerAction("time", "TIME", "time", "", "", ""),
-		linebot.NewDatetimePickerAction("datetime", "DATETIME", "datetime", "", "", ""),
 	)
 
 	_, err := bot.ReplyMessage(token, linebot.NewTemplateMessage("Date time picker alt text", template)).Do()
