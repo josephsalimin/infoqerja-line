@@ -23,13 +23,13 @@ func IsValidCommand(message string) bool {
 // GetCommand : get the type of command from user inputs
 func GetCommand(command string) Command {
 	co := strings.TrimSpace(command)
-	if IsValidCommand(co[1:]) {
+	if IsValidCommand(co) {
 		switch command {
-		case "help":
+		case "!help":
 			return &iqq.IncomingHelp{}
-		case "add":
+		case "!add":
 			return &iqq.IncomingAdd{}
-		case "show":
+		case "!show":
 			return &iqq.IncomingShow{}
 		default:
 			return &iqq.IncomingInvalid{}
