@@ -1,7 +1,8 @@
-package line
+package service
 
 import (
 	"infoqerja-line/app/constant"
+	iql "infoqerja-line/app/line"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -10,7 +11,7 @@ import (
 type IncomingHelp struct{}
 
 // Reply : Method service for IncomingHelp instance
-func (handler *IncomingHelp) Reply(bot BotClient, token string) error {
+func (handler *IncomingHelp) Reply(bot iql.BotClient, token string) error {
 	_, err := bot.ReplyMessage(token, linebot.NewTextMessage(constant.HelpMessage)).Do()
 	return err
 }
