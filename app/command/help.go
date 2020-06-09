@@ -16,5 +16,5 @@ func (handler *IncomingHelp) GetMessage() []linebot.SendingMessage {
 		linebot.NewMessageAction("Show Job", "!show"),
 	)
 
-	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version !!", template)}
+	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version", template)}
 }
