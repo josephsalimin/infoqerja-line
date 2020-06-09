@@ -11,15 +11,15 @@ type IncomingHelp struct{}
 func (handler *IncomingHelp) GetMessage() []linebot.SendingMessage {
 	template := linebot.NewCarouselTemplate(
 		linebot.NewCarouselColumn(
-			"", "Help Command", "",
+			"", "Help Command", "Command",
 			linebot.NewMessageAction("View Command", "!help"),
 		),
 		linebot.NewCarouselColumn(
-			"", "Add Job Command", "",
+			"", "Add Job Command", "Command",
 			linebot.NewMessageAction("Add Job", "!add"),
 		),
 		linebot.NewCarouselColumn(
-			"", "View Job Command", "",
+			"", "View Job Command", "Command",
 			linebot.NewMessageAction("Show Job", "!show"),
 		),
 	)
