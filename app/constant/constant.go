@@ -10,6 +10,9 @@ const (
 	// WelcomeMessage : Constant for welcome message
 	WelcomeMessage = `Welcome to the InfoQerja Bot!!!💻💻`
 
+	// UnWelcomeMessage : Constant for unwelcoming message
+	UnWelcomeMessage = `Please contact us for future improvement!!`
+
 	// InvalidMessage : Constant for invalid message
 	InvalidMessage = `Please enter a valid command!! Refer to !help for available command.`
 

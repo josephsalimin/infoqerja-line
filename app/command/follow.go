@@ -19,5 +19,5 @@ type UnWelcome struct{}
 
 // GetMessage : Method service for UnWelcome instance
 func (handler *UnWelcome) GetMessage() []linebot.SendingMessage {
-	return []linebot.SendingMessage{linebot.NewTextMessage(constant.WelcomeMessage)}
+	return []linebot.SendingMessage{linebot.NewTextMessage(constant.UnWelcomeMessage)}
 }
