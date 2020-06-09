@@ -47,24 +47,42 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				iql.HandleIncomingMessage(service, message.Text)
+				finder := &iql.Finder{
+					Command: message.Text,
+				}
+				iql.HandleIncomingMessage(service, finder)
 			}
 		case linebot.EventTypeFollow:
 			// add welcome handler
-			iql.HandleIncomingMessage(service, constant.WelcomeCommandCode)
+			finder := &iql.Finder{
+				Command: constant.WelcomeCommandCode,
+			}
+			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeUnfollow:
 			// add welcome handler
-			iql.HandleIncomingMessage(service, constant.UnWelcomeCommandCode)
+			finder := &iql.Finder{
+				Command: constant.UnWelcomeCommandCode,
+			}
+			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeJoin:
-			iql.HandleIncomingMessage(service, constant.WelcomeCommandCode)
+			finder := &iql.Finder{
+				Command: constant.UnWelcomeCommandCode,
+			}
+			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeLeave:
-			iql.HandleIncomingMessage(service, constant.UnWelcomeCommandCode)
+			finder := &iql.Finder{
+				Command: constant.UnWelcomeCommandCode,
+			}
+			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypePostback:
 			data := event.Postback.Data
 			if data == "DATE" {
 				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
 			}
-			iql.HandleIncomingMessage(service, "!show")
+			finder := &iql.Finder{
+				Command: "!show",
+			}
+			iql.HandleIncomingMessage(service, finder)
 		}
 	}
 }

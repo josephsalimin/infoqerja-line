@@ -15,6 +15,16 @@ type Command interface {
 	GetMessage() []linebot.SendingMessage
 }
 
+// FinderCommand : interface of searching command service
+type FinderCommand interface {
+	GetCommand() Command
+}
+
+// Finder : A service for searching something
+type Finder struct {
+	Command string
+}
+
 // IsValidCommand : Function to check wether user inputs is a command or not
 func IsValidCommand(message string) bool {
 	re := regexp.MustCompile("^!")
@@ -22,10 +32,10 @@ func IsValidCommand(message string) bool {
 }
 
 // GetCommand : get the type of command from user inputs
-func GetCommand(command string) Command {
-	co := strings.TrimSpace(command)
+func (finder *Finder) GetCommand() Command {
+	co := strings.TrimSpace(finder.Command)
 	if IsValidCommand(co) {
-		switch command {
+		switch finder.Command {
 		case constant.HelpCommandCode:
 			return &iqq.IncomingHelp{}
 		case constant.AddCommandCode:

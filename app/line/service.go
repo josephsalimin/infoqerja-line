@@ -25,9 +25,9 @@ func (service *Service) MessageServiceReply(command Command) error {
 }
 
 // HandleIncomingMessage : Handler for any incoming event that based on EventTypeMessage
-func HandleIncomingMessage(service MessageService, message string) {
+func HandleIncomingMessage(service MessageService, finder FinderCommand) {
 	// get command
-	command := GetCommand(message)
+	command := finder.GetCommand()
 	// exec something
 	// reply
 	if command != nil {
