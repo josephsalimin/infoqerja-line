@@ -6,14 +6,25 @@ import (
 
 // UserData : A model to represent the user data in the database
 type UserData struct {
-	State    stateful.State
-	SourceId string
+	state    stateful.State
+	SourceID string
 }
 
 // NewUserData : default constructor for UserData struct
 func NewUserData(source string, state stateful.State) *UserData {
 	return &UserData{
-		SourceId: source,
-		State:    state,
+		SourceID: source,
+		state:    state,
 	}
+}
+
+// GetState implement interface stateful
+func (user UserData) GetState() stateful.State {
+	return user.state
+}
+
+// SetState implement interface stateful
+func (user *UserData) SetState(state stateful.State) error {
+	user.state = state
+	return nil
 }
