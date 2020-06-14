@@ -4,6 +4,7 @@ import (
 	iqc "infoqerja-line/app/config"
 	constant "infoqerja-line/app/constant"
 	iql "infoqerja-line/app/line"
+	util "infoqerja-line/app/utils"
 	"log"
 	"net/http"
 
@@ -47,30 +48,30 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				finder := &iql.Finder{
+				finder := &util.Finder{
 					Command: message.Text,
 				}
 				iql.HandleIncomingMessage(service, finder)
 			}
 		case linebot.EventTypeFollow:
 			// add welcome handler
-			finder := &iql.Finder{
+			finder := &util.Finder{
 				Command: constant.WelcomeCommandCode,
 			}
 			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeUnfollow:
 			// add welcome handler
-			finder := &iql.Finder{
+			finder := &util.Finder{
 				Command: constant.UnWelcomeCommandCode,
 			}
 			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeJoin:
-			finder := &iql.Finder{
+			finder := &util.Finder{
 				Command: constant.UnWelcomeCommandCode,
 			}
 			iql.HandleIncomingMessage(service, finder)
 		case linebot.EventTypeLeave:
-			finder := &iql.Finder{
+			finder := &util.Finder{
 				Command: constant.UnWelcomeCommandCode,
 			}
 			iql.HandleIncomingMessage(service, finder)
@@ -79,7 +80,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			if data == "DATE" {
 				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
 			}
-			finder := &iql.Finder{
+			finder := &util.Finder{
 				Command: "!show",
 			}
 			iql.HandleIncomingMessage(service, finder)

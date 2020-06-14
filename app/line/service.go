@@ -1,6 +1,7 @@
 package line
 
 import (
+	util "infoqerja-line/app/utils"
 	"log"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -14,18 +15,18 @@ type Service struct {
 
 // MessageService : interface for injecting messaging service
 type MessageService interface {
-	MessageServiceReply(command Command) error
+	MessageServiceReply(command util.Command) error
 }
 
 // MessageServiceReply : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
-func (service *Service) MessageServiceReply(command Command) error {
+func (service *Service) MessageServiceReply(command util.Command) error {
 	// exec methoda
 	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetMessage()...).Do()
 	return err
 }
 
 // HandleIncomingMessage : Handler for any incoming event that based on EventTypeMessage
-func HandleIncomingMessage(service MessageService, finder FinderCommand) {
+func HandleIncomingMessage(service MessageService, finder util.FinderCommand) {
 	// get command
 	command := finder.GetCommand()
 	// exec something
