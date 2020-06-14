@@ -1,17 +1,13 @@
 package model
 
-import (
-	"github.com/bykof/stateful"
-)
-
 // UserData : A model to represent the user data in the database
 type UserData struct {
-	state    stateful.State
+	state    string
 	SourceID string
 }
 
 // NewUserData : default constructor for UserData struct
-func NewUserData(source string, state stateful.State) *UserData {
+func NewUserData(source string, state string) *UserData {
 	return &UserData{
 		SourceID: source,
 		state:    state,
@@ -19,12 +15,12 @@ func NewUserData(source string, state stateful.State) *UserData {
 }
 
 // GetState implement interface stateful
-func (user UserData) GetState() stateful.State {
+func (user UserData) GetState() string {
 	return user.state
 }
 
 // SetState implement interface stateful
-func (user *UserData) SetState(state stateful.State) error {
+func (user *UserData) SetState(state string) error {
 	user.state = state
 	return nil
 }
