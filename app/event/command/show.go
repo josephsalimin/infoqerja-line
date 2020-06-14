@@ -1,7 +1,7 @@
 package command
 
 import (
-	"infoqerja-line/app/constant"
+	constant "infoqerja-line/app/utils/constant"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )

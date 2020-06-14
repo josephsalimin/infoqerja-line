@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"strings"
 
-	constant "infoqerja-line/app/constant"
 	iqq "infoqerja-line/app/event/command"
+	constant "infoqerja-line/app/utils/constant"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )

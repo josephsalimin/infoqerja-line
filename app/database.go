@@ -2,7 +2,7 @@ package main
 
 import (
 	iqc "infoqerja-line/app/config"
-	constant "infoqerja-line/app/constant"
+	constant "infoqerja-line/app/utils/constant"
 	"log"
 
 	"github.com/Kamva/mgm/v2"

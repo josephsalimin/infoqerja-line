@@ -2,9 +2,9 @@ package handler
 
 import (
 	iqc "infoqerja-line/app/config"
-	constant "infoqerja-line/app/constant"
 	iql "infoqerja-line/app/line"
 	util "infoqerja-line/app/utils"
+	constant "infoqerja-line/app/utils/constant"
 	"log"
 	"net/http"
 
