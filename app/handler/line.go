@@ -55,6 +55,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					iql.HandleIncomingMessage(service, finder)
 				} else {
 					// handle incoming normal message
+					
 				}
 				// default : don;t need to take care of this
 			}

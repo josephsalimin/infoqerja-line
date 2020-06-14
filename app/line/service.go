@@ -18,6 +18,11 @@ type MessageService interface {
 	MessageServiceReply(command util.Command) error
 }
 
+// JobService : interface for injecting job service
+type JobService interface {
+	ExecuteJob() error
+}
+
 // MessageServiceReply : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
 func (service *Service) MessageServiceReply(command util.Command) error {
 	// exec methoda

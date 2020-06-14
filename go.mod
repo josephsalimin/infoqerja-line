@@ -3,8 +3,9 @@ module infoqerja-line
 go 1.14
 
 require (
+	github.com/Kamva/mgm v1.2.3
 	github.com/Kamva/mgm/v2 v2.0.0
-	github.com/bykof/stateful v0.0.8 // indirect
+	github.com/google/go-cmp v0.4.1 // indirect
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.4
 	github.com/joho/godotenv v1.3.0
@@ -13,9 +14,10 @@ require (
 	github.com/line/line-bot-sdk-go v7.4.0+incompatible
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.6.1
+	github.com/tidwall/pretty v1.0.1 // indirect
 	go.mongodb.org/mongo-driver v1.3.4
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
