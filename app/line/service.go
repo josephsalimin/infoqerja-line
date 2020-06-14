@@ -21,7 +21,7 @@ type MessageService interface {
 // MessageServiceReply : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
 func (service *Service) MessageServiceReply(command util.Command) error {
 	// exec methoda
-	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetMessage()...).Do()
+	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetReply()...).Do()
 	return err
 }
 

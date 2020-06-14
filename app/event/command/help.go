@@ -7,8 +7,8 @@ import (
 // IncomingHelp : A class to represent the help command
 type IncomingHelp struct{}
 
-// GetMessage : Method service for IncomingHelp instance
-func (handler *IncomingHelp) GetMessage() []linebot.SendingMessage {
+// GetReply : Method service for IncomingHelp instance
+func (handler *IncomingHelp) GetReply() []linebot.SendingMessage {
 	template := linebot.NewCarouselTemplate(
 		linebot.NewCarouselColumn(
 			"", "HELP", "Press the button below to show InfoQerja Menu",

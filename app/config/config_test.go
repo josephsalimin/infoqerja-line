@@ -34,7 +34,7 @@ func TestReadConfig(t *testing.T) {
 
 	mockObj := new(MockReader)
 	mockObj.On("Read").Return(nil)
-	mockObj.On("Decode").Return(&Config{Host: "localhost", Port: 5000, ChannelSecret: "1234", ChannelToken: "1234"}, nil)
+	mockObj.On("Decode").Return(&Config{Host: "localhost", Port: 5000, ChannelSecret: "1234", ChannelToken: "1234", DatabaseURI: "mongodb://root:12345@localhost:27017"}, nil)
 
 	configService, err := ReadConfig(mockObj)
 	config := configService.GetConfig()
@@ -47,6 +47,7 @@ func TestReadConfig(t *testing.T) {
 	assert.Equal(config.Port, 5000)
 	assert.Equal(config.ChannelSecret, "1234")
 	assert.Equal(config.ChannelToken, "1234")
+	assert.Equal(config.DatabaseURI, "mongodb://root:12345@localhost:27017")
 }
 
 func TestReadConfigReadFail(t *testing.T) {

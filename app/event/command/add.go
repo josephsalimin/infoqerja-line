@@ -7,8 +7,8 @@ import (
 // IncomingAdd : A class to represent the add job command
 type IncomingAdd struct{}
 
-// GetMessage : Method service for IncomingHelp instance
-func (handler *IncomingAdd) GetMessage() []linebot.SendingMessage {
+// GetReply : Method service for IncomingHelp instance
+func (handler *IncomingAdd) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
 		"", "Adding Job", "Select job date deadline!",
 		linebot.NewDatetimePickerAction("Add Date", "DATE", "date", "", "", ""),

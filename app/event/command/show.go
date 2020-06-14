@@ -9,8 +9,8 @@ import (
 // IncomingShow : A class to represent the show job command
 type IncomingShow struct{}
 
-// GetMessage : Method service for IncomingHelp instance
-func (handler *IncomingShow) GetMessage() []linebot.SendingMessage {
+// GetReply : Method service for IncomingHelp instance
+func (handler *IncomingShow) GetReply() []linebot.SendingMessage {
 
 	// template : carousel
 

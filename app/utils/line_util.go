@@ -13,7 +13,7 @@ import (
 type (
 	// Command : Interface for Reply service
 	Command interface {
-		GetMessage() []linebot.SendingMessage
+		GetReply() []linebot.SendingMessage
 	}
 
 	// FinderCommand : interface of searching command service
@@ -37,6 +37,7 @@ func IsValidCommand(message string) bool {
 func (finder *Finder) GetCommand() Command {
 	co := strings.TrimSpace(finder.Command)
 	if IsValidCommand(co) {
+		// check first if the user of this message have states in adding job -> if has, then delete the procedure first / or give confirmation abour deletion
 		switch finder.Command {
 		case constant.HelpCommandCode:
 			return &iqq.IncomingHelp{}
@@ -53,6 +54,6 @@ func (finder *Finder) GetCommand() Command {
 			return &iqq.IncomingInvalid{}
 		}
 	} else {
-		return nil
+		return nil // need to modify this, to check on adding job events
 	}
 }

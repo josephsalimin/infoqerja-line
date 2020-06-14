@@ -38,6 +38,10 @@ func main() {
 
 	addr := config.Host + ":" + strconv.Itoa(config.Port)
 
+	if err := InitiateDatabaseConnection(config); err != nil {
+		log.Print(err)
+	} // init database
+
 	r := GetApplicationRouter(config, bot)
 	router := handlers.LoggingHandler(os.Stdout, r)
 

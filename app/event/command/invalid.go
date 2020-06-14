@@ -7,8 +7,8 @@ import (
 // IncomingInvalid :  Instance for handling invalid message
 type IncomingInvalid struct{}
 
-// GetMessage : Method service for IncomingInvalid instance
-func (handler *IncomingInvalid) GetMessage() []linebot.SendingMessage {
+// GetReply : Method service for IncomingInvalid instance
+func (handler *IncomingInvalid) GetReply() []linebot.SendingMessage {
 
 	template := linebot.NewButtonsTemplate(
 		"", "Invalid Command", "Please click button below to refer to available command",
