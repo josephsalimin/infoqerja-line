@@ -14,5 +14,7 @@ func (handler *IncomingAdd) GetReply() []linebot.SendingMessage {
 		linebot.NewDatetimePickerAction("Add Date", "DATE", "date", "", "", ""),
 	)
 
+	// adding user data, and blank input job in the database
+
 	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version !!", template)}
 }
