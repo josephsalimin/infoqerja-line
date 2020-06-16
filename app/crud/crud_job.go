@@ -20,29 +20,6 @@ func CreateJob(job *model.Job) error {
 	return nil
 }
 
-// CreateUserData : Creating a new user data, usually to save user state when the user inserting job using bot line
-func CreateUserData(user *model.UserData) error {
-	userColl := mgm.Coll(user)
-	if err := userColl.Create(user); err != nil {
-		log.Print(err)
-		return err
-	}
-	return nil
-}
-
-// ReadSingleUserData : Reading the state for the user. Useful when trying to get the state the user currently in.
-func ReadSingleUserData(sourceID string) (*model.UserData, error) {
-	userData := &model.UserData{}
-
-	if err := mgm.Coll(userData).First(bson.M{"sourceID": sourceID}, userData); err != nil {
-		log.Print(err)
-		return nil, err
-	}
-
-	return userData, nil
-
-}
-
 // ReadJob : Function to use for reading all completed inserted data
 func ReadJob() ([]model.Job, error) {
 	result := []model.Job{}
@@ -81,15 +58,6 @@ func UpdateJob(job *model.Job) error {
 	return nil
 }
 
-// UpdateUser : Updating user data , usually for changing the user state when adding job
-func UpdateUser(user *model.UserData) error {
-	if err := mgm.Coll(user).Update(user); err != nil {
-		log.Print(err)
-		return err
-	}
-	return nil
-}
-
 // DeleteJob : Deleting current job, usually because either a failure in completing data input from user, or cancelation from user when inputing data
 func DeleteJob(sourceID string) error {
 	jobData, err := ReadCurrentNotFinishedJob(sourceID)
@@ -98,25 +66,6 @@ func DeleteJob(sourceID string) error {
 	}
 
 	if err = mgm.Coll(&model.Job{}).Delete(jobData); err != nil {
-		log.Print(err)
-		return err
-	}
-
-	return nil
-
-}
-
-// DeleteUserData : Deleting current job, usually because insertion has been done (successful) or the insertion is cancelled prematurely
-func DeleteUserData(sourceID string) error {
-	userData := &model.UserData{}
-	if err := mgm.Coll(&model.UserData{}).First(bson.M{
-		"sourceID": sourceID,
-	}, userData); err != nil {
-		log.Print(err)
-		return err
-	}
-
-	if err := mgm.Coll(&model.UserData{}).Delete(userData); err != nil {
 		log.Print(err)
 		return err
 	}
