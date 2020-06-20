@@ -24,6 +24,7 @@ func ReadSingleUserData(sourceID string) (*model.UserData, error) {
 
 	if err := mgm.Coll(userData).First(bson.M{"sourceID": sourceID}, userData); err != nil {
 		log.Print(err)
+		log.Print("debugging")
 		return nil, err
 	}
 

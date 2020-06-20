@@ -13,7 +13,6 @@ import (
 func InitiateDatabaseConnection(config iqc.Config) error {
 	if err := mgm.SetDefaultConfig(nil, constant.DatabaseName, options.Client().ApplyURI(config.DatabaseURI)); err != nil {
 		log.Print(err)
-		log.Print("hai hai yay yay")
 		return err
 	}
 	return nil
