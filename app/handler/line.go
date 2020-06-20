@@ -3,6 +3,7 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	crud "infoqerja-line/app/crud"
+	iqi "infoqerja-line/app/event/input"
 	iql "infoqerja-line/app/line"
 	"infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
@@ -59,18 +60,25 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 						finder := &iql.JobState{
 							State: constant.NoState, // for adding new user to the service batch database
 						}
-						iql.HandleIncomingService(service, finder)
+						data := iqi.BaseData{
+							SourceID: utils.GetSource(*event),
+						}
+
+						iql.HandleIncomingJob(service, finder, data)
 					}
 				} else {
 					// read user data
 					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
-					// only if the user is recognized as an applicant of inserting data
 					if err == nil {
 						finder := &iql.JobState{
 							State: user.State,
 						}
+						data := iqi.BaseData{
+							SourceID: utils.GetSource(*event),
+							Input:    message.Text,
+						}
 						// handle the incoming service
-						iql.HandleIncomingService(service, finder)
+						iql.HandleIncomingJob(service, finder, data)
 					} // means it just a normal chat
 				}
 			}
@@ -90,22 +98,30 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			user, err := crud.ReadSingleUserData(utils.GetSource(*event))
 			// only if the user is recognized as an applicant of inserting data
 			if err == nil {
-				finder := &iql.JobState{
-					State: user.State,
-				}
-				// handle the incoming service
-				iql.HandleIncomingService(service, finder)
-			} // means it just a normal chat
+				postback := event.Postback.Data
+				var finder *iql.JobState
+				var data iqi.BaseData
 
-			// getting the data --> for the date data
-			// data := event.Postback.Data
-			// if data == "DATE" {
-			// 	log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
-			// }
-			// finder := &util.Finder{
-			// 	Command: "!show",
-			// }
-			// iql.HandleIncomingCommand(service, finder)
+				if postback == "DATE" {
+					finder = &iql.JobState{
+						State: user.State,
+					}
+
+					data = iqi.BaseData{
+						SourceID: utils.GetSource(*event),
+						Input:    *&event.Postback.Params.Date,
+					}
+				} else { // wrong input data
+					finder = &iql.JobState{
+						State: "error",
+					}
+
+					data = iqi.BaseData{
+						SourceID: utils.GetSource(*event),
+					}
+				}
+				iql.HandleIncomingJob(service, finder, data)
+			} // means it just a normal chat
 		}
 	}
 }

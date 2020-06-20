@@ -61,7 +61,7 @@ type (
 
 	// FinderJob : interface of searching job service
 	FinderJob interface {
-		GetJob() Job
+		GetJob(data iqi.BaseData) Job
 	}
 
 	// JobState : struct representing current state of user
@@ -70,19 +70,29 @@ type (
 	}
 )
 
-// GetState : get the type of command from user inputs
-func (state *JobState) GetJob() Job {
+// GetJob : get the type of command from user inputs
+func (state *JobState) GetJob(data iqi.BaseData) Job {
 	switch state.State {
 	case constant.WaitDateInput:
-		return &iqi.IncomingAddDateJob{}
+		return &iqi.IncomingAddDateJob{
+			Data: data,
+		}
 	case constant.WaitDescInput:
-		return &iqi.IncomingAddDescJob{}
+		return &iqi.IncomingAddDescJob{
+			Data: data,
+		}
 	case constant.WaitTitleInput:
-		return &iqi.IncomingAddTitleJob{}
+		return &iqi.IncomingAddTitleJob{
+			Data: data,
+		}
 	case constant.NoState:
-		return &iqi.IncomingStartInput{}
+		return &iqi.IncomingStartInput{
+			Data: data,
+		}
 	default:
-		return &iqi.IncomingErrorEvent{}
+		return &iqi.IncomingErrorEvent{
+			Data: data,
+		}
 	}
 }
 
@@ -129,8 +139,9 @@ func HandleIncomingCommand(service MessageService, finder FinderCommand) {
 	}
 }
 
-func HandleIncomingService(service JobService, finder FinderJob) {
-	job := finder.GetJob()
+// HandleIncomingJob : Handler for any incoming job that based on EventTypeMessage and EventTypePostback
+func HandleIncomingJob(service JobService, finder FinderJob, data iqi.BaseData) {
+	job := finder.GetJob(data)
 	// filling job description data
 	if job != nil {
 		if err := service.JobServiceExecute(job); err != nil {
@@ -138,7 +149,10 @@ func HandleIncomingService(service JobService, finder FinderJob) {
 			finderLocal := &JobState{
 				State: "error",
 			}
-			errJob := finderLocal.GetJob() // handling error
+			dataLocal := &iqi.BaseData{
+				SourceID: data.SourceID,
+			}
+			errJob := finderLocal.GetJob(*dataLocal) // handling error
 			_ = service.JobServiceExecute(errJob)
 		}
 	}
