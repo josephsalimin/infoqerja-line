@@ -7,10 +7,12 @@ import (
 	"log"
 )
 
+// IncomingStartInput : A struct to represent incoming adding date to certain job to the database by certain user
 type IncomingStartInput struct {
 	Data BaseData
 }
 
+// Execute : A method for Executing Starting Point job
 func (job *IncomingStartInput) Execute() error {
 	// get user data
 	user, err := crud.ReadSingleUserData(job.Data.SourceID)

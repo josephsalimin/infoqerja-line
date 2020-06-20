@@ -6,10 +6,12 @@ import (
 	"log"
 )
 
+// IncomingAddTitleJob : A struct to represent incoming adding title to certain job to the database by certain user
 type IncomingAddTitleJob struct {
 	Data BaseData
 }
 
+// Execute : A method for Executing Incoming Add Title job
 func (job *IncomingAddTitleJob) Execute() error {
 	user, err := crud.ReadSingleUserData(job.Data.SourceID)
 	jobListing, err := crud.ReadCurrentNotFinishedJob(job.Data.SourceID)

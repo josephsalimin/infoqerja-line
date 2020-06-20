@@ -6,10 +6,12 @@ import (
 	"log"
 )
 
+// IncomingAddDescJob : A struct to represent incoming adding description to certain job to the database by certain user
 type IncomingAddDescJob struct {
 	Data BaseData
 }
 
+// Execute : A method for Executing Incoming Add Desc job
 func (job *IncomingAddDescJob) Execute() error {
 	user, err := crud.ReadSingleUserData(job.Data.SourceID)
 	jobListing, err := crud.ReadCurrentNotFinishedJob(job.Data.SourceID)
