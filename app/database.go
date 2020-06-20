@@ -5,7 +5,7 @@ import (
 	constant "infoqerja-line/app/utils/constant"
 	"log"
 
-	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 

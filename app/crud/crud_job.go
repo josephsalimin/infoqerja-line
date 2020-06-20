@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v3"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 )
