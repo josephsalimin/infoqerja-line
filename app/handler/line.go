@@ -52,10 +52,11 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					finder := &util.Finder{
 						Command: message.Text,
 					}
-					iql.HandleIncomingMessage(service, finder)
+					iql.HandleIncomingCommand(service, finder)
+
 				} else {
 					// handle incoming normal message
-					
+
 				}
 				// default : don;t need to take care of this
 			}
@@ -64,16 +65,14 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			finder := &util.Finder{
 				Command: constant.WelcomeCommandCode,
 			}
-			iql.HandleIncomingMessage(service, finder)
+			iql.HandleIncomingCommand(service, finder)
 		case linebot.EventTypeUnfollow:
 			finder := &util.Finder{
 				Command: constant.UnWelcomeCommandCode,
 			}
-			iql.HandleIncomingMessage(service, finder)
+			iql.HandleIncomingCommand(service, finder)
 		case linebot.EventTypePostback:
-
 			// checking user data
-
 			data := event.Postback.Data
 			if data == "DATE" {
 				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
@@ -81,9 +80,8 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			finder := &util.Finder{
 				Command: "!show",
 			}
-			iql.HandleIncomingMessage(service, finder)
+			iql.HandleIncomingCommand(service, finder)
 
-			
 		}
 	}
 }

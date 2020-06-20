@@ -9,4 +9,7 @@ const (
 
 	// WaitDateInput : a state where the machine / bot expect a source to input the datetime for the job
 	WaitDateInput = "wait-date"
+
+	// NoState : a state where user data is not registered / not accountable to any kind of transaction in database
+	NoState = "non"
 )

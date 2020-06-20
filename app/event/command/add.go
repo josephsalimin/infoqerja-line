@@ -1,20 +1,17 @@
 package command
 
 import (
+	constant "infoqerja-line/app/utils/constant"
+
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 // IncomingAdd : A class to represent the add job command
 type IncomingAdd struct{}
 
-// GetReply : Method service for IncomingHelp instance
+// GetReply : Method service for IncomingAdd instance
 func (handler *IncomingAdd) GetReply() []linebot.SendingMessage {
-	template := linebot.NewButtonsTemplate(
-		"", "Adding Job", "Select job date deadline!",
-		linebot.NewDatetimePickerAction("Add Date", "DATE", "date", "", "", ""),
-	)
-
-	// adding user data, and blank input job in the database
-
-	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version !!", template)}
+	// do something here
+	return []linebot.SendingMessage{linebot.NewTextMessage(constant.AddMessage), linebot.NewTextMessage("Please add job title")}
 }
+

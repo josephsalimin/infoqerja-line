@@ -30,15 +30,40 @@ func (service *Service) MessageServiceReply(command util.Command) error {
 	return err
 }
 
-// HandleIncomingMessage : Handler for any incoming event that based on EventTypeMessage
-func HandleIncomingMessage(service MessageService, finder util.FinderCommand) {
-	// get command
+// JobServiceExecute : Method service for IncomingJob instance; the service that were going to be injected is the Job interface service
+func (service *Service) JobServiceExecute(job util.Job) error {
+	// executing the method
+	if err := job.Execute(); err != nil {
+		log.Print(err)
+		return err
+	}
+	return nil
+}
+
+// HandleIncomingCommand : Handler for any incoming event that based on EventTypeMessage
+func HandleIncomingCommand(service MessageService, finder util.FinderCommand) {
 	command := finder.GetCommand()
-	// exec something
-	// reply
 	if command != nil {
 		if err := service.MessageServiceReply(command); err != nil {
 			log.Print(err)
 		}
 	}
 }
+
+func HandleIncomingService(service JobService, finder util.FinderCommand) {
+
+}
+
+// GetSource : Get source for any event happening to bot
+func GetSource(event linebot.Event) string {
+	switch event.Source.Type {
+	case linebot.EventSourceTypeUser:
+		return event.Source.UserID
+	case linebot.EventSourceTypeGroup:
+		return event.Source.UserID
+	case linebot.EventSourceTypeRoom:
+		return event.Source.RoomID
+	}
+	return event.Source.UserID
+}
+

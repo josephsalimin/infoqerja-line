@@ -1,5 +1,7 @@
 package input
 
-type ErrorInput struct {
-	
+type IncomingErrorInput struct{}
+
+func (job *IncomingErrorInput) Execute() error {
+	return nil
 }

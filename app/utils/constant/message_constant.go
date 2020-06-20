@@ -25,6 +25,9 @@ const (
 	// AddMessage : Constant for add job message
 	AddMessage = `Please add a new job!!😍`
 
+	// AddTitleMessage : Constant for add job message
+	AddTitleMessage = `Please add a new job title!!😍`
+
 	// ShowMessage : Constant for showing all job collected
 	ShowMessage = `Showing all job listing saved here 😎😎`
 
