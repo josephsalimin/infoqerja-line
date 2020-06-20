@@ -2,10 +2,10 @@ package handler
 
 import (
 	iqc "infoqerja-line/app/config"
+	crud "infoqerja-line/app/crud"
 	iql "infoqerja-line/app/line"
-	util "infoqerja-line/app/utils"
+	"infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
-	"log"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -48,40 +48,64 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if util.IsValidCommand(message.Text) {
-					finder := &util.Finder{
+				if iql.IsValidCommand(message.Text) {
+					finder := &iql.Finder{
 						Command: message.Text,
 					}
 					iql.HandleIncomingCommand(service, finder)
 
+					// suggesstion : create more sophisticated if about this edge of code
+					if message.Text == constant.AddCommandCode {
+						finder := &iql.JobState{
+							State: constant.NoState, // for adding new user to the service batch database
+						}
+						iql.HandleIncomingService(service, finder)
+					}
 				} else {
-					// handle incoming normal message
-
+					// read user data
+					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
+					// only if the user is recognized as an applicant of inserting data
+					if err == nil {
+						finder := &iql.JobState{
+							State: user.State,
+						}
+						// handle the incoming service
+						iql.HandleIncomingService(service, finder)
+					} // means it just a normal chat
 				}
-				// default : don;t need to take care of this
 			}
 		case linebot.EventTypeFollow:
 			// add welcome handler
-			finder := &util.Finder{
+			finder := &iql.Finder{
 				Command: constant.WelcomeCommandCode,
 			}
 			iql.HandleIncomingCommand(service, finder)
 		case linebot.EventTypeUnfollow:
-			finder := &util.Finder{
+			finder := &iql.Finder{
 				Command: constant.UnWelcomeCommandCode,
 			}
 			iql.HandleIncomingCommand(service, finder)
 		case linebot.EventTypePostback:
-			// checking user data
-			data := event.Postback.Data
-			if data == "DATE" {
-				log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
-			}
-			finder := &util.Finder{
-				Command: "!show",
-			}
-			iql.HandleIncomingCommand(service, finder)
+			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
+			user, err := crud.ReadSingleUserData(utils.GetSource(*event))
+			// only if the user is recognized as an applicant of inserting data
+			if err == nil {
+				finder := &iql.JobState{
+					State: user.State,
+				}
+				// handle the incoming service
+				iql.HandleIncomingService(service, finder)
+			} // means it just a normal chat
 
+			// getting the data --> for the date data
+			// data := event.Postback.Data
+			// if data == "DATE" {
+			// 	log.Printf("Successful getting data : (%v)", *&event.Postback.Params.Date)
+			// }
+			// finder := &util.Finder{
+			// 	Command: "!show",
+			// }
+			// iql.HandleIncomingCommand(service, finder)
 		}
 	}
 }
