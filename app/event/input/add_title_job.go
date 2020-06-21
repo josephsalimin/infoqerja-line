@@ -14,6 +14,12 @@ type IncomingAddTitleJob struct {
 // Execute : A method for Executing Incoming Add Title job
 func (job *IncomingAddTitleJob) Execute() error {
 	user, err := crud.ReadSingleUserData(job.Data.SourceID)
+
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+
 	jobListing, err := crud.ReadCurrentNotFinishedJob(job.Data.SourceID)
 
 	if err != nil {

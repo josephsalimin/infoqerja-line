@@ -16,14 +16,3 @@ func NewUserData(source string, state string) *UserData {
 		State:    state,
 	}
 }
-
-// GetState implement interface stateful
-func (user UserData) GetState() string {
-	return user.State
-}
-
-// SetState implement interface stateful
-func (user *UserData) SetState(state string) error {
-	user.State = state
-	return nil
-}

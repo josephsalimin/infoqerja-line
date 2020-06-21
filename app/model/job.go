@@ -2,7 +2,6 @@ package model
 
 import (
 	constant "infoqerja-line/app/utils/constant"
-	"log"
 	"time"
 
 	"github.com/Kamva/mgm/v2"
@@ -23,9 +22,7 @@ func NewJob(date string, desc string, title string, check bool, sourceID string)
 	t, err := time.Parse(constant.DateFormatLayout, date)
 	if err != nil {
 		t = time.Now()
-		log.Print(err)
 	}
-
 	return &Job{
 		SourceID:    sourceID,
 		Title:       title,
