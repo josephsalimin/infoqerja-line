@@ -58,10 +58,8 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				} else {
 					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
 					if err == nil {
-						// check user state, only able when it is both of 2 state, else : error event
 						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
 					}
-					// else :means normal message, ignore everything : might give feedback for personal chat
 				}
 			}
 		case linebot.EventTypeFollow:
