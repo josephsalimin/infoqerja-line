@@ -2,7 +2,11 @@ package handler
 
 import (
 	iqc "infoqerja-line/app/config"
+	crud "infoqerja-line/app/crud"
+	iqi "infoqerja-line/app/event/input"
 	iql "infoqerja-line/app/line"
+	"infoqerja-line/app/utils"
+	constant "infoqerja-line/app/utils/constant"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -36,14 +40,66 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, event := range events {
-		if event.Type == linebot.EventTypeMessage {
+		service := &iql.Service{
+			Bot:   h.bot,
+			Event: *event,
+		}
+
+		switch event.Type {
+		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				HandleIncomingMessage(h.bot, event.ReplyToken, message.Text)
+				if iql.IsValidCommand(message.Text) {
+					customCommandHandler(service, message.Text)
+					// suggesstion : create more sophisticated if about this edge of code
+					if message.Text == constant.AddCommandCode {
+						customJobHandler(service, constant.NoState, utils.GetSource(*event), "")
+					}
+				} else {
+					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
+					if err == nil {
+						// check user state, only able when it is both of 2 state, else : error event
+						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
+					}
+					// else :means normal message, ignore everything : might give feedback for personal chat
+				}
+			}
+		case linebot.EventTypeFollow:
+			customCommandHandler(service, constant.WelcomeCommandCode)
+		case linebot.EventTypeUnfollow:
+			customCommandHandler(service, constant.UnWelcomeCommandCode)
+		case linebot.EventTypePostback:
+			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
+			user, err := crud.ReadSingleUserData(utils.GetSource(*event))
+			// only if the user is recognized as an applicant of inserting data
+			if err == nil {
+				postback := event.Postback.Data
+				if postback == "DATE" {
+					customJobHandler(service, user.State, utils.GetSource(*event), event.Postback.Params.Date)
+				} else { // wrong input data
+					customJobHandler(service, "error", utils.GetSource(*event), "")
+				}
 			}
 		}
-		if event.Type == linebot.EventTypeFollow {
-			// add welcome handler
-		}
 	}
+}
+
+// Private Method
+func customCommandHandler(service *iql.Service, text string) {
+	finder := &iql.Finder{
+		Command: text,
+	}
+	iql.HandleIncomingCommand(service, finder)
+}
+
+// Private Method
+func customJobHandler(service *iql.Service, state, source, input string) {
+	finder := &iql.JobState{
+		State: state,
+	}
+	data := iqi.BaseData{
+		SourceID: source,
+		Input:    input,
+	}
+	iql.HandleIncomingJob(service, finder, data)
 }
