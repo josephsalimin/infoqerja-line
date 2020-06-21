@@ -21,6 +21,7 @@ func NewUserData(source string, state string) *UserData {
 	}
 }
 
+// Create : An method to insert the data into database
 func (user *UserData) Create() error {
 	if err := mgm.Coll(user).Create(user); err != nil {
 		log.Print(err)
@@ -29,6 +30,7 @@ func (user *UserData) Create() error {
 	return nil
 }
 
+// Update : An method to update the data into database
 func (user *UserData) Update() error {
 	if err := mgm.Coll(user).Update(user); err != nil {
 		log.Print(err)
@@ -37,6 +39,7 @@ func (user *UserData) Update() error {
 	return nil
 }
 
+// Delete : An method to delete the data in the database
 func (user *UserData) Delete() error {
 	if err := mgm.Coll(&UserData{}).Delete(user); err != nil {
 		log.Print(err)

@@ -33,6 +33,7 @@ func NewJob(date string, desc string, title string, check bool, sourceID string)
 	}
 }
 
+// Create : An method to insert the data into database
 func (job *Job) Create() error {
 	if err := mgm.Coll(job).Create(job); err != nil {
 		log.Print(err)
@@ -41,6 +42,7 @@ func (job *Job) Create() error {
 	return nil
 }
 
+// Update : An method to update the data into database
 func (job *Job) Update() error {
 	if err := mgm.Coll(job).Update(job); err != nil {
 		log.Print(err)
@@ -49,6 +51,7 @@ func (job *Job) Update() error {
 	return nil
 }
 
+// Delete : An method to delete the data in the database
 func (job *Job) Delete() error {
 	if err := mgm.Coll(&Job{}).Delete(job); err != nil {
 		log.Print(err)
