@@ -2,10 +2,10 @@ package line
 
 import (
 	iqq "infoqerja-line/app/command"
+	"infoqerja-line/app/model"
 	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils/constant"
 	"log"
-	"regexp"
 	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -28,12 +28,6 @@ type (
 	}
 )
 
-// IsValidCommand : Function to check wether user inputs is a command or not
-func IsValidCommand(message string) bool {
-	re := regexp.MustCompile("^!")
-	return re.FindString(message) != ""
-}
-
 // GetCommand : get the type of command from user inputs
 func (finder *Finder) GetCommand() Command {
 	co := strings.TrimSpace(finder.Command)
@@ -41,7 +35,7 @@ func (finder *Finder) GetCommand() Command {
 	case constant.HelpCommandCode:
 		return &iqq.IncomingHelp{}
 	case constant.AddCommandCode:
-		return &iqq.IncomingAdd{}
+		return &iqq.Add{}
 	case constant.ShowCommandCode:
 		return &iqq.IncomingShow{}
 	case constant.WelcomeCommandCode: // hard coded code, for retrieving the welcome home page
@@ -57,11 +51,12 @@ type (
 	// Job : Interface for Executing a job
 	Job interface {
 		Execute() error
+		// make 4 method
 	}
 
 	// FinderJob : interface of searching job service
 	FinderJob interface {
-		GetJob(data state.BaseData) Job
+		GetJob(data model.BaseData) Job
 	}
 
 	// JobState : struct representing current state of user
@@ -71,7 +66,7 @@ type (
 )
 
 // GetJob : get the type of command from user inputs
-func (job *JobState) GetJob(data state.BaseData) Job {
+func (job *JobState) GetJob(data model.BaseData) Job {
 	switch job.State {
 	case constant.WaitDateInput:
 		return &state.IncomingAddDateJob{
@@ -140,7 +135,7 @@ func HandleIncomingCommand(service MessageService, finder FinderCommand) {
 }
 
 // HandleIncomingJob : Handler for any incoming job that based on EventTypeMessage and EventTypePostback
-func HandleIncomingJob(service JobService, finder FinderJob, data state.BaseData) {
+func HandleIncomingJob(service JobService, finder FinderJob, data model.BaseData) {
 	job := finder.GetJob(data)
 	// filling job description data
 	if err := service.JobServiceExecute(job); err != nil {
@@ -148,7 +143,7 @@ func HandleIncomingJob(service JobService, finder FinderJob, data state.BaseData
 		finderLocal := &JobState{
 			State: "error",
 		}
-		dataLocal := &state.BaseData{
+		dataLocal := &model.BaseData{
 			SourceID: data.SourceID,
 		}
 		errJob := finderLocal.GetJob(*dataLocal) // handling error

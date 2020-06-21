@@ -1,6 +1,7 @@
 package state
 
 import (
+	model "infoqerja-line/app/model"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"log"
@@ -10,7 +11,7 @@ import (
 
 // IncomingAddTitleJob : A struct to represent incoming adding title to certain job to the database by certain user
 type IncomingAddTitleJob struct {
-	Data BaseData
+	Data model.BaseData
 }
 
 // Execute : A method for Executing Incoming Add Title job

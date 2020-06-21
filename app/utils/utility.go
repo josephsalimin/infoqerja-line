@@ -2,6 +2,7 @@ package utils
 
 import (
 	constant "infoqerja-line/app/utils/constant"
+	"regexp"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -18,6 +19,12 @@ func IsStateValid(state string) bool {
 	default:
 		return false
 	}
+}
+
+// IsCommandValid: Function to check wether user inputs is a command or not
+func IsCommandValid(message string) bool {
+	re := regexp.MustCompile("^!")
+	return re.FindString(message) != ""
 }
 
 // GetSource : Get source for any event happening to bot

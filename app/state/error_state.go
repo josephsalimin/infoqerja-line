@@ -1,6 +1,7 @@
 package state
 
 import (
+	model "infoqerja-line/app/model"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"log"
@@ -10,7 +11,7 @@ import (
 
 // IncomingErrorEvent : A struct to represent incoming error event to certain job to the database by certain user
 type IncomingErrorEvent struct {
-	Data BaseData
+	Data model.BaseData
 }
 
 // Execute : A method for Executing Incoming Error Event job, normally for fallback from other things

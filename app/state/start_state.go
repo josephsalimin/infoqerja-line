@@ -11,7 +11,7 @@ import (
 
 // IncomingStartInput : A struct to represent incoming adding date to certain job to the database by certain user
 type IncomingStartInput struct {
-	Data BaseData
+	Data model.BaseData
 }
 
 // Execute : A method for Executing Starting Point job

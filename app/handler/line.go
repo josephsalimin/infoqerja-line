@@ -3,7 +3,7 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	iql "infoqerja-line/app/line"
-	state "infoqerja-line/app/state"
+	model "infoqerja-line/app/model"
 	"infoqerja-line/app/utils"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
@@ -50,10 +50,10 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				if iql.IsValidCommand(message.Text) {
+				if util.IsCommandValid(message.Text) {
 					customCommandHandler(service, message.Text)
 
-					// suggesstion : create more sophisticated if about this edge of code
+					// addition : for adding job, we create new State for the user
 					if message.Text == constant.AddCommandCode {
 						customJobHandler(service, constant.NoState, utils.GetSource(*event), "")
 					}
@@ -98,7 +98,7 @@ func customJobHandler(service *iql.Service, currState, source, input string) {
 	finder := &iql.JobState{
 		State: currState,
 	}
-	data := state.BaseData{
+	data := model.BaseData{
 		SourceID: source,
 		Input:    input,
 	}
