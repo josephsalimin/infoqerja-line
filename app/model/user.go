@@ -1,6 +1,10 @@
 package model
 
-import "github.com/Kamva/mgm/v2"
+import (
+	"log"
+
+	"github.com/Kamva/mgm/v3"
+)
 
 // UserData : A model to represent the user data in the database
 type UserData struct {
@@ -15,4 +19,29 @@ func NewUserData(source string, state string) *UserData {
 		SourceID: source,
 		State:    state,
 	}
+}
+
+func (user *UserData) Create() error {
+	if err := mgm.Coll(user).Create(user); err != nil {
+		log.Print(err)
+		return err
+	}
+	return nil
+}
+
+func (user *UserData) Update() error {
+	if err := mgm.Coll(user).Update(user); err != nil {
+		log.Print(err)
+		return err
+	}
+	return nil
+}
+
+func (user *UserData) Delete() error {
+	if err := mgm.Coll(&UserData{}).Delete(user); err != nil {
+		log.Print(err)
+		return err
+	}
+
+	return nil
 }

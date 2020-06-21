@@ -2,9 +2,10 @@ package model
 
 import (
 	constant "infoqerja-line/app/utils/constant"
+	"log"
 	"time"
 
-	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v3"
 )
 
 // Job : A model to represent the job data in the database
@@ -30,4 +31,29 @@ func NewJob(date string, desc string, title string, check bool, sourceID string)
 		IsComplete:  check,
 		Description: desc,
 	}
+}
+
+func (job *Job) Create() error {
+	if err := mgm.Coll(job).Create(job); err != nil {
+		log.Print(err)
+		return err
+	}
+	return nil
+}
+
+func (job *Job) Update() error {
+	if err := mgm.Coll(job).Update(job); err != nil {
+		log.Print(err)
+		return err
+	}
+	return nil
+}
+
+func (job *Job) Delete() error {
+	if err := mgm.Coll(&Job{}).Delete(job); err != nil {
+		log.Print(err)
+		return err
+	}
+
+	return nil
 }

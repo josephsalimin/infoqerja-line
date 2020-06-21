@@ -3,7 +3,6 @@ module infoqerja-line
 go 1.14
 
 require (
-	github.com/Kamva/mgm/v2 v2.0.0
 	github.com/Kamva/mgm/v3 v3.0.0
 	github.com/google/go-cmp v0.4.1 // indirect
 	github.com/gorilla/handlers v1.4.2

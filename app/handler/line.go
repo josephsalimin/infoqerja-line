@@ -2,14 +2,15 @@ package handler
 
 import (
 	iqc "infoqerja-line/app/config"
-	crud "infoqerja-line/app/crud"
 	iql "infoqerja-line/app/line"
 	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils"
+	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 // LineBotHandler will handle all line's callback request
@@ -51,13 +52,15 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if iql.IsValidCommand(message.Text) {
 					customCommandHandler(service, message.Text)
+
 					// suggesstion : create more sophisticated if about this edge of code
 					if message.Text == constant.AddCommandCode {
 						customJobHandler(service, constant.NoState, utils.GetSource(*event), "")
 					}
 				} else {
-					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
-					if err == nil {
+					if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
+						constant.SourceID: utils.GetSource(*event),
+					}); err == nil {
 						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
 					}
 				}
@@ -68,9 +71,9 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			customCommandHandler(service, constant.UnWelcomeCommandCode)
 		case linebot.EventTypePostback:
 			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
-			user, err := crud.ReadSingleUserData(utils.GetSource(*event))
-			// only if the user is recognized as an applicant of inserting data
-			if err == nil {
+			if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
+				constant.SourceID: utils.GetSource(*event),
+			}); err == nil {
 				postback := event.Postback.Data
 				if postback == "DATE" {
 					customJobHandler(service, user.State, utils.GetSource(*event), event.Postback.Params.Date)
