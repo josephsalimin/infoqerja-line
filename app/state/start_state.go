@@ -74,29 +74,28 @@ func (state *StartState) Process() error {
 		constant.SourceID: state.Data.SourceID,
 	})
 
-	if err != nil { // if no user data detected
-		if err = model.NewUserData(state.Data.SourceID, constant.NoState).Create(); err != nil {
+	if user != nil { // if no user data detected
+		// if user data detected, please check the state first
+		if err := user.Delete(); err != nil {
 			log.Print(err)
 			return err
 		}
-	} else { // if user data detected, please check the state first
-		if user.State != constant.NoState {
-			user.State = constant.NoState
-			if err := user.Update(); err != nil {
+		jobs, err := (&util.JobReader{}).ReadFiltered(bson.M{
+			constant.SourceID:   state.Data.SourceID,
+			constant.IsComplete: false,
+		})
+		// be careful: bug might lurking here
+		for _, job := range jobs {
+			if err = job.Delete(); err != nil {
 				log.Print(err)
-				return err
-			}
-			jobs, err := (&util.JobReader{}).ReadFiltered(bson.M{
-				constant.SourceID:   state.Data.SourceID,
-				constant.IsComplete: false,
-			})
-			// be careful: bug might lurking here
-			for _, state := range jobs {
-				if err = state.Delete(); err != nil {
-					log.Print(err)
-				}
 			}
 		}
+	}
+
+	if err = model.NewUserData(state.Data.SourceID, constant.NoState).Create(); err != nil {
+		log.Print(err)
+		log.Print("Creating New User")
+		return err
 	}
 	// Creating new job
 	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {
@@ -111,9 +110,8 @@ func (state *StartState) Process() error {
 
 // NextState : Proceed to the next state
 func (state *StartState) NextState() error {
-	user := state.Data.User
-	user.State = constant.WaitTitleInput
-	if err := user.Update(); err != nil {
+	state.Data.User.State = constant.WaitTitleInput
+	if err := state.Data.User.Update(); err != nil {
 		log.Print(err)
 		return err
 	}

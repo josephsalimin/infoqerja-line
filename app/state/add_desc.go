@@ -84,30 +84,20 @@ func (state *AddDescState) Parse(event linebot.Event) error {
 
 // Process : Do certain process for certain state
 func (state *AddDescState) Process() error {
-	_, err := (&util.UserDataReader{}).ReadOne(bson.M{
-		constant.SourceID: state.Data.SourceID,
+
+	jobListing, err := (&util.JobReader{}).ReadOne(bson.M{
+		constant.SourceID:   state.Data.SourceID,
+		constant.IsComplete: false,
 	})
 
-	if err != nil { // if no user data detected
-		if err = model.NewUserData(state.Data.SourceID, constant.WaitTitleInput).Create(); err != nil {
-			log.Print(err)
-			return err
-		}
-	} else { // if user data detected, then please update the data, and delete previous inputed state data that were incomplete
-		jobs, err := (&util.JobReader{}).ReadFiltered(bson.M{
-			constant.SourceID:   state.Data.SourceID,
-			constant.IsComplete: false,
-		})
-
-		for _, state := range jobs {
-			if err = state.Delete(); err != nil {
-				log.Print(err)
-			}
-		}
+	if err != nil {
+		log.Print(err)
+		return err
 	}
 
-	// Creating new job
-	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {
+	// update joblisting data
+	jobListing.Description = state.Data.Input
+	if err = jobListing.Update(); err != nil {
 		log.Print(err)
 		return err
 	}

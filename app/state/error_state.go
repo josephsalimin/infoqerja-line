@@ -67,13 +67,15 @@ func (state *ErrorState) Process() error {
 		}
 	}
 
-	user := state.Data.User
+	user, _ := (&util.UserDataReader{}).ReadOne(bson.M{
+		constant.SourceID: state.Data.SourceID,
+	})
+
 	if err := user.Delete(); err != nil {
 		log.Print(err)
 	}
 
 	return nil
-
 }
 
 // NextState : Proceed to the next state
