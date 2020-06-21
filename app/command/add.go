@@ -1,6 +1,8 @@
 package command
 
 import (
+	model "infoqerja-line/app/model"
+	"infoqerja-line/app/state"
 	constant "infoqerja-line/app/utils/constant"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -15,6 +17,6 @@ func (handler *Add) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.AddMessage), linebot.NewTextMessage("Please add job title")}
 }
 
-// func (handler *Add) Do() error {
-
-// }
+func (handler *Add) GetState() (model.State, error) {
+	return &state.StartState{}, nil
+}

@@ -1,14 +1,16 @@
 package command
 
 import (
+	model "infoqerja-line/app/model"
+
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 // IncomingHelp : A class to represent the help command
-type IncomingHelp struct{}
+type Help struct{}
 
 // GetReply : Method service for IncomingHelp instance
-func (handler *IncomingHelp) GetReply() []linebot.SendingMessage {
+func (handler *Help) GetReply() []linebot.SendingMessage {
 	template := linebot.NewCarouselTemplate(
 		linebot.NewCarouselColumn(
 			"", "HELP", "Press the button below to show InfoQerja Menu",
@@ -25,4 +27,8 @@ func (handler *IncomingHelp) GetReply() []linebot.SendingMessage {
 	)
 
 	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view this in Mobile Version", template)}
+}
+
+func (handler *Help) GetState() (model.State, error) {
+	return nil, nil
 }

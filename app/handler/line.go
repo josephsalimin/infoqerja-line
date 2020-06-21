@@ -3,7 +3,6 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	iql "infoqerja-line/app/line"
-	model "infoqerja-line/app/model"
 	"infoqerja-line/app/utils"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
@@ -52,16 +51,14 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if util.IsCommandValid(message.Text) {
 					customCommandHandler(service, message.Text)
-
-					// addition : for adding job, we create new State for the user
-					if message.Text == constant.AddCommandCode {
-						customJobHandler(service, constant.NoState, utils.GetSource(*event), "")
-					}
 				} else {
 					if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 						constant.SourceID: utils.GetSource(*event),
-					}); err == nil {
-						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
+						constant.State: bson.M{
+							"$in": bson.A{constant.WaitTitleInput, constant.WaitDescInput},
+						},
+					}); err == nil && user != nil {
+						customJobHandler(service, user.State)
 					}
 				}
 			}
@@ -73,12 +70,13 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
 			if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 				constant.SourceID: utils.GetSource(*event),
-			}); err == nil {
+				constant.State:    constant.WaitDateInput,
+			}); err == nil && user != nil {
 				postback := event.Postback.Data
 				if postback == "DATE" {
-					customJobHandler(service, user.State, utils.GetSource(*event), event.Postback.Params.Date)
+					customJobHandler(service, user.State)
 				} else { // wrong input data
-					customJobHandler(service, "error", utils.GetSource(*event), "")
+					customJobHandler(service, "error")
 				}
 			}
 		}
@@ -94,13 +92,9 @@ func customCommandHandler(service *iql.Service, text string) {
 }
 
 // Private Method
-func customJobHandler(service *iql.Service, currState, source, input string) {
+func customJobHandler(service *iql.Service, currState string) {
 	finder := &iql.JobState{
 		State: currState,
 	}
-	data := model.BaseData{
-		SourceID: source,
-		Input:    input,
-	}
-	iql.HandleIncomingJob(service, finder, data)
+	iql.HandleIncomingJob(service, finder)
 }

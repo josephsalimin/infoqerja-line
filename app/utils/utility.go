@@ -39,3 +39,13 @@ func GetSource(event linebot.Event) string {
 	}
 	return event.Source.UserID
 }
+
+// GetData : An utility function to get text message data from linebot
+func GetData(typer interface{}) string {
+	switch message := typer.(type) {
+	case *linebot.TextMessage:
+		return message.Text
+	default:
+		return ""
+	}
+}

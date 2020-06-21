@@ -13,13 +13,13 @@ import (
 
 type (
 	// Command : Interface for Reply service
-	Command interface {
-		GetReply() []linebot.SendingMessage
-	}
+	// Command interface {
+	// 	GetReply() []linebot.SendingMessage
+	// }
 
 	// FinderCommand : interface of searching command service
 	FinderCommand interface {
-		GetCommand() Command
+		GetCommand() model.Command
 	}
 
 	// Finder : A service for searching something
@@ -29,34 +29,34 @@ type (
 )
 
 // GetCommand : get the type of command from user inputs
-func (finder *Finder) GetCommand() Command {
+func (finder *Finder) GetCommand() model.Command {
 	co := strings.TrimSpace(finder.Command)
 	switch co {
 	case constant.HelpCommandCode:
-		return &iqq.IncomingHelp{}
+		return &iqq.Help{}
 	case constant.AddCommandCode:
 		return &iqq.Add{}
 	case constant.ShowCommandCode:
-		return &iqq.IncomingShow{}
+		return &iqq.Show{}
 	case constant.WelcomeCommandCode: // hard coded code, for retrieving the welcome home page
 		return &iqq.Welcome{}
 	case constant.UnWelcomeCommandCode:
 		return &iqq.UnWelcome{}
 	default:
-		return &iqq.IncomingInvalid{}
+		return &iqq.Invalid{}
 	}
 }
 
 type (
 	// Job : Interface for Executing a job
-	Job interface {
-		Execute() error
-		// make 4 method
-	}
+	// Job interface {
+	// 	Execute() error
+	// 	// make 4 method
+	// }
 
 	// FinderJob : interface of searching job service
-	FinderJob interface {
-		GetJob(data model.BaseData) Job
+	FinderState interface {
+		GetState() model.State
 	}
 
 	// JobState : struct representing current state of user
@@ -66,28 +66,18 @@ type (
 )
 
 // GetJob : get the type of command from user inputs
-func (job *JobState) GetJob(data model.BaseData) Job {
+func (job *JobState) GetState() model.State {
 	switch job.State {
 	case constant.WaitDateInput:
-		return &state.IncomingAddDateJob{
-			Data: data,
-		}
+		return &state.AddDateState{}
 	case constant.WaitDescInput:
-		return &state.IncomingAddDescJob{
-			Data: data,
-		}
+		return &state.AddDescState{}
 	case constant.WaitTitleInput:
-		return &state.IncomingAddTitleJob{
-			Data: data,
-		}
+		return &state.AddTitleState{}
 	case constant.NoState:
-		return &state.IncomingStartInput{
-			Data: data,
-		}
+		return &state.StartState{}
 	default:
-		return &state.IncomingErrorEvent{
-			Data: data,
-		}
+		return &state.ErrorState{}
 	}
 }
 
@@ -97,56 +87,73 @@ type Service struct {
 	Event linebot.Event
 }
 
-// MessageService : interface for injecting messaging service
-type MessageService interface {
-	MessageServiceReply(command Command) error
+// Commander : interface for injecting messaging service
+type Commander interface {
+	CommandService(command model.Command) error
 }
 
-// JobService : interface for injecting job service
-type JobService interface {
-	JobServiceExecute(job Job) error
+// Inputer : interface for injecting job service
+type Inputer interface {
+	InputService(state model.State) error
 }
 
-// MessageServiceReply : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
-func (service *Service) MessageServiceReply(command Command) error {
-	// exec methoda
-	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetReply()...).Do()
+// CommandService : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
+func (service *Service) CommandService(command model.Command) error {
+
+	// execute the action
+	state, err := command.GetState()
+	if state != nil {
+		service.InputService(state)
+	}
+
+	// reply
+	_, err = service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetReply()...).Do()
 	return err
 }
 
-// JobServiceExecute : Method service for IncomingJob instance; the service that were going to be injected is the Job interface service
-func (service *Service) JobServiceExecute(job Job) error {
-	// executing the method
-	if err := job.Execute(); err != nil {
+// InputService : Method service for IncomingJob instance; the service that were going to be injected is the Job interface service
+func (service *Service) InputService(state model.State) error {
+	// parse
+	if err := state.Parse(service.Event); err != nil {
 		log.Print(err)
 		return err
 	}
-	return nil
+	// process
+	if err := state.Process(); err != nil {
+		log.Print(err)
+		return err
+	}
+	// get reply
+	reply := state.GetReply()
+	// next state
+	if err := state.NextState(); err != nil {
+		log.Print(err)
+		return err
+	}
+	// bales reply :)
+	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, reply...).Do()
+	return err
 }
 
 // HandleIncomingCommand : Handler for any incoming event that based on EventTypeMessage
-func HandleIncomingCommand(service MessageService, finder FinderCommand) {
+func HandleIncomingCommand(service Commander, finder FinderCommand) {
 	command := finder.GetCommand()
 	if command != nil {
-		if err := service.MessageServiceReply(command); err != nil {
+		if err := service.CommandService(command); err != nil {
 			log.Print(err)
 		}
 	}
 }
 
 // HandleIncomingJob : Handler for any incoming job that based on EventTypeMessage and EventTypePostback
-func HandleIncomingJob(service JobService, finder FinderJob, data model.BaseData) {
-	job := finder.GetJob(data)
-	// filling job description data
-	if err := service.JobServiceExecute(job); err != nil {
+func HandleIncomingJob(service Inputer, finder FinderState) {
+	job := finder.GetState()
+	if err := service.InputService(job); err != nil {
 		log.Print(err)
 		finderLocal := &JobState{
 			State: "error",
 		}
-		dataLocal := &model.BaseData{
-			SourceID: data.SourceID,
-		}
-		errJob := finderLocal.GetJob(*dataLocal) // handling error
-		_ = service.JobServiceExecute(errJob)
+		errJob := finderLocal.GetState() // handling error
+		_ = service.InputService(errJob)
 	}
 }

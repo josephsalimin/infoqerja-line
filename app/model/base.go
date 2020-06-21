@@ -6,12 +6,17 @@ import "github.com/line/line-bot-sdk-go/linebot"
 type BaseData struct {
 	SourceID string
 	Input    string
+	User     UserData
 }
 
 type (
-	// Actioner : Simple interface for doing certain action
-	Actioner interface {
-		Do() error
+	// Processor : Simple interface for doing certain process
+	Processor interface {
+		Process() error
+	}
+	// Stater
+	Stater interface {
+		GetState() (State, error)
 	}
 	// Replier : Simple interface for getting reply context
 	Replier interface {
@@ -19,7 +24,7 @@ type (
 	}
 	// Parser : Simple interface for parsing data
 	Parser interface {
-		Parse() error
+		Parse(event linebot.Event) error
 	}
 	// Next : Simple interface to move into next state (state design pattern)
 	Next interface {
@@ -29,7 +34,7 @@ type (
 
 // Command : An interface for command struct that able to do certain action and have reply
 type Command interface {
-	Actioner
+	Stater
 	Replier
 }
 
@@ -37,6 +42,6 @@ type Command interface {
 type State interface {
 	Replier
 	Parser
-	Actioner
+	Processor
 	Next
 }
