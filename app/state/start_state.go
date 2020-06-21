@@ -97,12 +97,11 @@ func (state *StartState) Process() error {
 				}
 			}
 		}
-
 	}
-
 	// Creating new job
 	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {
 		log.Print(err)
+		log.Print("Creating New Job")
 		return err
 	}
 
