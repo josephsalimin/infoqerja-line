@@ -68,15 +68,15 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			customCommandHandler(service, constant.UnWelcomeCommandCode)
 		case linebot.EventTypePostback:
 			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
-			if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
-				constant.SourceID: utils.GetSource(*event),
-				constant.State:    constant.WaitDateInput,
-			}); err == nil && user != nil {
-				postback := event.Postback.Data
-				if postback == "DATE" {
+			postback := event.Postback.Data
+			if postback == "DATE" {
+				if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
+					constant.SourceID: utils.GetSource(*event),
+					constant.State:    constant.WaitDateInput,
+				}); err == nil && user != nil {
 					customJobHandler(service, user.State)
-				} else { // wrong input data
-					customJobHandler(service, "error")
+				} else {
+					customJobHandler(service, constant.Error)
 				}
 			}
 		}

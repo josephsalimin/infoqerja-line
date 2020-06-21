@@ -12,11 +12,6 @@ import (
 )
 
 type (
-	// Command : Interface for Reply service
-	// Command interface {
-	// 	GetReply() []linebot.SendingMessage
-	// }
-
 	// FinderCommand : interface of searching command service
 	FinderCommand interface {
 		GetCommand() model.Command
@@ -48,13 +43,8 @@ func (finder *Finder) GetCommand() model.Command {
 }
 
 type (
-	// Job : Interface for Executing a job
-	// Job interface {
-	// 	Execute() error
-	// 	// make 4 method
-	// }
 
-	// FinderJob : interface of searching job service
+	// FinderState : interface of searching job service
 	FinderState interface {
 		GetState() model.State
 	}
@@ -65,7 +55,7 @@ type (
 	}
 )
 
-// GetJob : get the type of command from user inputs
+// GetState : get the type of state when waiting for user inputs
 func (job *JobState) GetState() model.State {
 	switch job.State {
 	case constant.WaitDateInput:
@@ -99,38 +89,29 @@ type Inputer interface {
 
 // CommandService : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
 func (service *Service) CommandService(command model.Command) error {
-
-	// execute the action
 	state, err := command.GetState()
 	if state != nil {
 		service.InputService(state)
 	}
-
-	// reply
 	_, err = service.Bot.ReplyMessage(service.Event.ReplyToken, command.GetReply()...).Do()
 	return err
 }
 
 // InputService : Method service for IncomingJob instance; the service that were going to be injected is the Job interface service
 func (service *Service) InputService(state model.State) error {
-	// parse
 	if err := state.Parse(service.Event); err != nil {
 		log.Print(err)
 		return err
 	}
-	// process
 	if err := state.Process(); err != nil {
 		log.Print(err)
 		return err
 	}
-	// get reply
 	reply := state.GetReply()
-	// next state
 	if err := state.NextState(); err != nil {
 		log.Print(err)
 		return err
 	}
-	// bales reply :)
 	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, reply...).Do()
 	return err
 }
@@ -151,7 +132,7 @@ func HandleIncomingJob(service Inputer, finder FinderState) {
 	if err := service.InputService(job); err != nil {
 		log.Print(err)
 		finderLocal := &JobState{
-			State: "error",
+			State: constant.Error,
 		}
 		errJob := finderLocal.GetState() // handling error
 		_ = service.InputService(errJob)

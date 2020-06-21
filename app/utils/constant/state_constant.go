@@ -6,4 +6,5 @@ const (
 	WaitDescInput  = "wait-desc"
 	WaitDateInput  = "wait-date"
 	NoState        = "non"
+	Error          = "error"
 )

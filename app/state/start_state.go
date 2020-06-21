@@ -15,46 +15,6 @@ type StartState struct {
 	Data model.BaseData
 }
 
-// Execute : A method for Executing Starting Point state
-func (state *StartState) Execute() error {
-
-	user, err := (&util.UserDataReader{}).ReadOne(bson.M{
-		constant.SourceID: state.Data.SourceID,
-	})
-
-	if err != nil { // if no user data detected
-		if err = model.NewUserData(state.Data.SourceID, constant.WaitTitleInput).Create(); err != nil {
-			log.Print(err)
-			return err
-		}
-	} else { // if user data detected, then please update the data, and delete previous inputed state data that were incomplete
-		states, err := (&util.JobReader{}).ReadFiltered(bson.M{
-			constant.SourceID:   state.Data.SourceID,
-			constant.IsComplete: false,
-		})
-
-		for _, state := range states {
-			if err = state.Delete(); err != nil {
-				log.Print(err)
-			}
-		}
-
-		user.State = constant.WaitTitleInput
-		if err = user.Update(); err != nil {
-			log.Print(err)
-			return err
-		}
-
-	}
-
-	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {
-		log.Print(err)
-		return err
-	}
-
-	return nil
-}
-
 // GetReply : Get the reply for next question
 func (state *StartState) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage("Please add job title : ")}
