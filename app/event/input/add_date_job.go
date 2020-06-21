@@ -31,7 +31,7 @@ func (job *IncomingAddDateJob) Execute() error {
 	// update joblisting data
 	t, err := time.Parse(constant.DateFormatLayout, job.Data.Input)
 	if err != nil {
-		t = time.Now()
+		t = time.Now().AddDate(0, 6, 0) // default value : deadline 6 month from now
 		log.Print(err)
 	}
 

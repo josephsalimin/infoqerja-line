@@ -26,24 +26,6 @@ func BuildLineBotHandler(config iqc.Config, bot iql.BotClient) *LineBotHandler {
 	}
 }
 
-func customCommandHandler(service *iql.Service, text string) {
-	finder := &iql.Finder{
-		Command: text,
-	}
-	iql.HandleIncomingCommand(service, finder)
-}
-
-func customJobHandler(service *iql.Service, state, source, input string) {
-	finder := &iql.JobState{
-		State: state,
-	}
-	data := iqi.BaseData{
-		SourceID: source,
-		Input:    input,
-	}
-	iql.HandleIncomingJob(service, finder, data)
-}
-
 // Callback will handle the callback from line
 func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 	events, err := h.bot.ParseRequest(r)
@@ -69,30 +51,14 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if iql.IsValidCommand(message.Text) {
 					customCommandHandler(service, message.Text)
-
 					// suggesstion : create more sophisticated if about this edge of code
 					if message.Text == constant.AddCommandCode {
-						// finder := &iql.JobState{
-						// 	State: constant.NoState, // for adding new user to the service batch database
-						// }
-						// data := iqi.BaseData{
-						// 	SourceID: utils.GetSource(*event),
-						// }
-
-						// iql.HandleIncomingJob(service, finder, data)
 						customJobHandler(service, constant.NoState, utils.GetSource(*event), "")
 					}
 				} else {
 					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
 					if err == nil {
-						// finder := &iql.JobState{
-						// 	State: user.State,
-						// }
-						// data := iqi.BaseData{
-						// 	SourceID: utils.GetSource(*event),
-						// 	Input:    message.Text,
-						// }
-						// iql.HandleIncomingJob(service, finder, data)
+						// check user state, only able when it is both of 2 state, else : error event
 						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
 					}
 					// else :means normal message, ignore everything : might give feedback for personal chat
@@ -109,27 +75,31 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			if err == nil {
 				postback := event.Postback.Data
 				if postback == "DATE" {
-					// finder = &iql.JobState{
-					// 	State: user.State,
-					// }
-
-					// data = iqi.BaseData{
-					// 	SourceID: utils.GetSource(*event),
-					// 	Input:    event.Postback.Params.Date,
-					// }
 					customJobHandler(service, user.State, utils.GetSource(*event), event.Postback.Params.Date)
 				} else { // wrong input data
-					// finder = &iql.JobState{
-					// 	State: "error",
-					// }
-
-					// data = iqi.BaseData{
-					// 	SourceID: utils.GetSource(*event),
-					// }
 					customJobHandler(service, "error", utils.GetSource(*event), "")
 				}
-				// iql.HandleIncomingJob(service, finder, data)
-			} // means it just a normal chat
+			}
 		}
 	}
+}
+
+// Private Method
+func customCommandHandler(service *iql.Service, text string) {
+	finder := &iql.Finder{
+		Command: text,
+	}
+	iql.HandleIncomingCommand(service, finder)
+}
+
+// Private Method
+func customJobHandler(service *iql.Service, state, source, input string) {
+	finder := &iql.JobState{
+		State: state,
+	}
+	data := iqi.BaseData{
+		SourceID: source,
+		Input:    input,
+	}
+	iql.HandleIncomingJob(service, finder, data)
 }

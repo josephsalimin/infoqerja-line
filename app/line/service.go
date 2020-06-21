@@ -143,18 +143,15 @@ func HandleIncomingCommand(service MessageService, finder FinderCommand) {
 func HandleIncomingJob(service JobService, finder FinderJob, data iqi.BaseData) {
 	job := finder.GetJob(data)
 	// filling job description data
-	if job != nil {
-		if err := service.JobServiceExecute(job); err != nil {
-			log.Print(err)
-			finderLocal := &JobState{
-				State: "error",
-			}
-			dataLocal := &iqi.BaseData{
-				SourceID: data.SourceID,
-			}
-			errJob := finderLocal.GetJob(*dataLocal) // handling error
-			_ = service.JobServiceExecute(errJob)
+	if err := service.JobServiceExecute(job); err != nil {
+		log.Print(err)
+		finderLocal := &JobState{
+			State: "error",
 		}
+		dataLocal := &iqi.BaseData{
+			SourceID: data.SourceID,
+		}
+		errJob := finderLocal.GetJob(*dataLocal) // handling error
+		_ = service.JobServiceExecute(errJob)
 	}
-
 }
