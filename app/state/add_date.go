@@ -113,8 +113,7 @@ func (state *AddDateState) Process() error {
 // NextState : Proceed to the next state
 func (state *AddDateState) NextState() error {
 	user := state.Data.User
-	user.State = constant.NoState
-	if err := user.Update(); err != nil {
+	if err := user.Delete(); err != nil {
 		log.Print(err)
 		return err
 	}
