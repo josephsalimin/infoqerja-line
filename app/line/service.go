@@ -1,8 +1,8 @@
 package line
 
 import (
-	iqq "infoqerja-line/app/event/command"
-	iqi "infoqerja-line/app/event/input"
+	iqq "infoqerja-line/app/command"
+	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils/constant"
 	"log"
 	"regexp"
@@ -61,7 +61,7 @@ type (
 
 	// FinderJob : interface of searching job service
 	FinderJob interface {
-		GetJob(data iqi.BaseData) Job
+		GetJob(data state.BaseData) Job
 	}
 
 	// JobState : struct representing current state of user
@@ -71,26 +71,26 @@ type (
 )
 
 // GetJob : get the type of command from user inputs
-func (state *JobState) GetJob(data iqi.BaseData) Job {
-	switch state.State {
+func (job *JobState) GetJob(data state.BaseData) Job {
+	switch job.State {
 	case constant.WaitDateInput:
-		return &iqi.IncomingAddDateJob{
+		return &state.IncomingAddDateJob{
 			Data: data,
 		}
 	case constant.WaitDescInput:
-		return &iqi.IncomingAddDescJob{
+		return &state.IncomingAddDescJob{
 			Data: data,
 		}
 	case constant.WaitTitleInput:
-		return &iqi.IncomingAddTitleJob{
+		return &state.IncomingAddTitleJob{
 			Data: data,
 		}
 	case constant.NoState:
-		return &iqi.IncomingStartInput{
+		return &state.IncomingStartInput{
 			Data: data,
 		}
 	default:
-		return &iqi.IncomingErrorEvent{
+		return &state.IncomingErrorEvent{
 			Data: data,
 		}
 	}
@@ -140,7 +140,7 @@ func HandleIncomingCommand(service MessageService, finder FinderCommand) {
 }
 
 // HandleIncomingJob : Handler for any incoming job that based on EventTypeMessage and EventTypePostback
-func HandleIncomingJob(service JobService, finder FinderJob, data iqi.BaseData) {
+func HandleIncomingJob(service JobService, finder FinderJob, data state.BaseData) {
 	job := finder.GetJob(data)
 	// filling job description data
 	if err := service.JobServiceExecute(job); err != nil {
@@ -148,7 +148,7 @@ func HandleIncomingJob(service JobService, finder FinderJob, data iqi.BaseData) 
 		finderLocal := &JobState{
 			State: "error",
 		}
-		dataLocal := &iqi.BaseData{
+		dataLocal := &state.BaseData{
 			SourceID: data.SourceID,
 		}
 		errJob := finderLocal.GetJob(*dataLocal) // handling error

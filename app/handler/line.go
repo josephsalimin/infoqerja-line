@@ -3,8 +3,8 @@ package handler
 import (
 	iqc "infoqerja-line/app/config"
 	crud "infoqerja-line/app/crud"
-	iqi "infoqerja-line/app/event/input"
 	iql "infoqerja-line/app/line"
+	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"net/http"
@@ -58,10 +58,8 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				} else {
 					user, err := crud.ReadSingleUserData(utils.GetSource(*event))
 					if err == nil {
-						// check user state, only able when it is both of 2 state, else : error event
 						customJobHandler(service, user.State, utils.GetSource(*event), message.Text)
 					}
-					// else :means normal message, ignore everything : might give feedback for personal chat
 				}
 			}
 		case linebot.EventTypeFollow:
@@ -93,11 +91,11 @@ func customCommandHandler(service *iql.Service, text string) {
 }
 
 // Private Method
-func customJobHandler(service *iql.Service, state, source, input string) {
+func customJobHandler(service *iql.Service, currState, source, input string) {
 	finder := &iql.JobState{
-		State: state,
+		State: currState,
 	}
-	data := iqi.BaseData{
+	data := state.BaseData{
 		SourceID: source,
 		Input:    input,
 	}
