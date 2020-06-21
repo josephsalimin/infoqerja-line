@@ -56,7 +56,6 @@ func (state *ErrorState) Parse(event linebot.Event) error {
 
 // Process : Do certain process for certain state
 func (state *ErrorState) Process() error {
-	// if no user detected, please delete all job created by this
 	jobs, err := (&util.JobReader{}).ReadFiltered(bson.M{
 		constant.SourceID:   state.Data.SourceID,
 		constant.IsComplete: false,
@@ -68,15 +67,16 @@ func (state *ErrorState) Process() error {
 		}
 	}
 
+	user := state.Data.User
+	if err := user.Delete(); err != nil {
+		log.Print(err)
+	}
+
 	return nil
 
 }
 
 // NextState : Proceed to the next state
 func (state *ErrorState) NextState() error {
-	user := state.Data.User
-	if err := user.Delete(); err != nil {
-		log.Print(err)
-	}
 	return nil
 }
