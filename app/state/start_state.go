@@ -91,8 +91,8 @@ func (state *StartState) Process() error {
 			}
 		}
 	}
-
-	if err = model.NewUserData(state.Data.SourceID, constant.NoState).Create(); err != nil {
+	user = model.NewUserData(state.Data.SourceID, constant.NoState)
+	if err = user.Create(); err != nil {
 		log.Print(err)
 		log.Print("Creating New User")
 		return err
@@ -110,8 +110,12 @@ func (state *StartState) Process() error {
 
 // NextState : Proceed to the next state
 func (state *StartState) NextState() error {
-	state.Data.User.State = constant.WaitTitleInput
-	if err := state.Data.User.Update(); err != nil {
+	user, _ := (&util.UserDataReader{}).ReadOne(bson.M{
+		constant.SourceID: state.Data.SourceID,
+	})
+
+	user.State = constant.WaitTitleInput
+	if err := user.Update(); err != nil {
 		log.Print(err)
 		return err
 	}

@@ -65,18 +65,9 @@ func (state *AddDateState) GetReply() []linebot.SendingMessage {
 
 // Parse : Parse data needed by certain state
 func (state *AddDateState) Parse(event linebot.Event) error {
-	user, err := (&util.UserDataReader{}).ReadOne(bson.M{
-		constant.SourceID: util.GetSource(event),
-	})
-	if err != nil {
-		log.Print(err)
-		return err
-	}
-
 	state.Data = model.BaseData{
 		SourceID: util.GetSource(event),
 		Input:    util.GetData(event.Message),
-		User:     *user,
 	}
 
 	return nil
@@ -112,7 +103,10 @@ func (state *AddDateState) Process() error {
 
 // NextState : Proceed to the next state
 func (state *AddDateState) NextState() error {
-	user := state.Data.User
+	user, _ := (&util.UserDataReader{}).ReadOne(bson.M{
+		constant.SourceID: state.Data.SourceID,
+	})
+
 	if err := user.Delete(); err != nil {
 		log.Print(err)
 		return err

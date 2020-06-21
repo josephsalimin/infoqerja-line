@@ -60,18 +60,9 @@ func (state *AddTitleState) GetReply() []linebot.SendingMessage {
 
 // Parse : Parse data needed by certain state
 func (state *AddTitleState) Parse(event linebot.Event) error {
-	user, err := (&util.UserDataReader{}).ReadOne(bson.M{
-		constant.SourceID: util.GetSource(event),
-	})
-	if err != nil {
-		log.Print(err)
-		return err
-	}
-
 	state.Data = model.BaseData{
 		SourceID: util.GetSource(event),
 		Input:    util.GetData(event.Message),
-		User:     *user,
 	}
 
 	return nil
@@ -102,7 +93,10 @@ func (state *AddTitleState) Process() error {
 
 // NextState : Proceed to the next state
 func (state *AddTitleState) NextState() error {
-	user := state.Data.User
+	user, _ := (&util.UserDataReader{}).ReadOne(bson.M{
+		constant.SourceID: state.Data.SourceID,
+	})
+
 	user.State = constant.WaitDescInput
 	if err := user.Update(); err != nil {
 		log.Print(err)

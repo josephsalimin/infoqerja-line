@@ -6,7 +6,6 @@ import "github.com/line/line-bot-sdk-go/linebot"
 type BaseData struct {
 	SourceID string
 	Input    string
-	User     UserData
 }
 
 type (
@@ -14,7 +13,7 @@ type (
 	Processor interface {
 		Process() error
 	}
-	// Stater
+	// Stater :
 	Stater interface {
 		GetState() (State, error)
 	}
