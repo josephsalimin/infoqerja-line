@@ -71,5 +71,4 @@ func DeleteJob(sourceID string) error {
 	}
 
 	return nil
-
 }
