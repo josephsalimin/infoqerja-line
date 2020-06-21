@@ -1,4 +1,4 @@
-package input
+package state
 
 import (
 	crud "infoqerja-line/app/crud"
@@ -6,13 +6,13 @@ import (
 	"log"
 )
 
-// IncomingAddDescJob : A struct to represent incoming adding description to certain job to the database by certain user
-type IncomingAddDescJob struct {
+// IncomingAddTitleJob : A struct to represent incoming adding title to certain job to the database by certain user
+type IncomingAddTitleJob struct {
 	Data BaseData
 }
 
-// Execute : A method for Executing Incoming Add Desc job
-func (job *IncomingAddDescJob) Execute() error {
+// Execute : A method for Executing Incoming Add Title job
+func (job *IncomingAddTitleJob) Execute() error {
 	user, err := crud.ReadSingleUserData(job.Data.SourceID)
 
 	if err != nil {
@@ -28,14 +28,14 @@ func (job *IncomingAddDescJob) Execute() error {
 	}
 
 	// update current state
-	user.State = constant.WaitDateInput
+	user.State = constant.WaitDescInput
 	if err = crud.UpdateUser(user); err != nil {
 		log.Print(err)
 		return err
 	}
 
 	// update joblisting data
-	jobListing.Description = job.Data.Input
+	jobListing.Title = job.Data.Input
 	if err = crud.UpdateJob(jobListing); err != nil {
 		log.Print(err)
 		return err

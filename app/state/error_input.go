@@ -1,4 +1,4 @@
-package input
+package state
 
 import (
 	crud "infoqerja-line/app/crud"
