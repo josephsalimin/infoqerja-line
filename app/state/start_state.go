@@ -75,7 +75,7 @@ func (state *StartState) Process() error {
 	})
 
 	if err != nil { // if no user data detected
-		if err = model.NewUserData(state.Data.SourceID, constant.WaitTitleInput).Create(); err != nil {
+		if err = model.NewUserData(state.Data.SourceID, constant.NoState).Create(); err != nil {
 			log.Print(err)
 			return err
 		}
