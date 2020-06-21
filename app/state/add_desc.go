@@ -5,7 +5,6 @@ import (
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"log"
-	"time"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"go.mongodb.org/mongo-driver/bson"
@@ -58,7 +57,7 @@ func (state *AddDescState) Execute() error {
 func (state *AddDescState) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
 		"", "", "Select date for job deadline :)",
-		linebot.NewDatetimePickerAction("Pick Date", "DATE", "date", time.Now().String(), "", ""),
+		linebot.NewDatetimePickerAction("Pick Date", "DATE", "date", "", "", ""),
 	)
 
 	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view in mobile device", template)}
