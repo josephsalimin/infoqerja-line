@@ -26,12 +26,12 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 
 	var holder []*linebot.CarouselColumn
 	for _, job := range jobs {
-		holder = append(holder, &linebot.NewCarouselColumn(
+		holder = append(holder, linebot.NewCarouselColumn(
 			imageURL, job.Title, job.Description,
 		))
 	}
 
-	return []linebot.SendingMessage{linebot.NewCarouselTemplate(holder...)}
+	return []linebot.SendingMessage{linebot.NewTemplateMessage(constant.UnavailableMessage, linebot.NewCarouselTemplate(holder...))}
 }
 
 // GetData : Get the data necessary for jobs
