@@ -28,6 +28,7 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 	for _, job := range jobs {
 		holder = append(holder, linebot.NewCarouselColumn(
 			imageURL, job.Title, job.Description,
+			linebot.NewPostbackAction("Say hello", "hello こんにちは", "", ""),
 		))
 	}
 
