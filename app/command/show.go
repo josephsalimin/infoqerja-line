@@ -7,7 +7,7 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
-// IncomingShow : A class to represent the show job command
+// Show : A class to represent the show job command
 type Show struct{}
 
 // GetReply : Method service for IncomingHelp instance
@@ -20,6 +20,7 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 
 // Get Data
 
+// GetState : Method to get any state a certain command produce, if present
 func (handler *Show) GetState() (model.State, error) {
 	return nil, nil
 }

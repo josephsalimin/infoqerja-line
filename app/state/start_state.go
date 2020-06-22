@@ -17,7 +17,7 @@ type StartState struct {
 
 // GetReply : Get the reply for next question
 func (state *StartState) GetReply() []linebot.SendingMessage {
-	return []linebot.SendingMessage{linebot.NewTextMessage("Please add job title : ")}
+	return []linebot.SendingMessage{linebot.NewTextMessage(constant.AddTitleMessage)}
 }
 
 // Parse : Parse data needed by certain state

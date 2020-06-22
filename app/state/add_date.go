@@ -18,7 +18,7 @@ type AddDateState struct {
 
 // GetReply : Get the reply for next question
 func (state *AddDateState) GetReply() []linebot.SendingMessage {
-	return []linebot.SendingMessage{linebot.NewTextMessage("Thank you for adding job data :)")}
+	return []linebot.SendingMessage{linebot.NewTextMessage(constant.ThankYouMessage)}
 }
 
 // Parse : Parse data needed by certain state

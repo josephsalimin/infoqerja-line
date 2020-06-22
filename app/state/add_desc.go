@@ -18,11 +18,11 @@ type AddDescState struct {
 // GetReply : Get the reply for next question
 func (state *AddDescState) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
-		"", "", "Select date for job deadline :)",
-		linebot.NewDatetimePickerAction("Pick Date", "DATE", "date", "", "", ""),
+		"", "", constant.AddDateMessage,
+		linebot.NewDatetimePickerAction("Pick a date", "DATE", "date", "", "", ""),
 	)
 
-	return []linebot.SendingMessage{linebot.NewTemplateMessage("Please view in mobile device", template)}
+	return []linebot.SendingMessage{linebot.NewTemplateMessage(constant.UnavailableMessage, template)}
 }
 
 // Parse : Parse data needed by certain state

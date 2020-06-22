@@ -15,6 +15,7 @@ func (handler *Welcome) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.WelcomeMessage)}
 }
 
+// GetState : Method to get any state a certain command produce, if present
 func (handler *Welcome) GetState() (model.State, error) {
 	return nil, nil
 }
@@ -27,6 +28,7 @@ func (handler *UnWelcome) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.UnWelcomeMessage)}
 }
 
+// GetState : Method to get any state a certain command produce, if present
 func (handler *UnWelcome) GetState() (model.State, error) {
 	return nil, nil
 }

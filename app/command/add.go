@@ -14,9 +14,10 @@ type Add struct{}
 // GetReply : Method service for IncomingAdd instance
 func (handler *Add) GetReply() []linebot.SendingMessage {
 	// do something here
-	return []linebot.SendingMessage{linebot.NewTextMessage(constant.AddMessage), linebot.NewTextMessage("Please add job title")}
+	return []linebot.SendingMessage{linebot.NewTextMessage(constant.AddMessage)}
 }
 
+// GetState : Method to get any state a certain command produce, if present
 func (handler *Add) GetState() (model.State, error) {
 	return &state.StartState{}, nil
 }

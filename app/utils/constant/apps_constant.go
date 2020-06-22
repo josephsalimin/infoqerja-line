@@ -9,13 +9,17 @@ const (
 	WelcomeMessage   = `Welcome to the InfoQerja Bot!!!💻💻`
 	UnWelcomeMessage = `Please contact us for future improvement!!`
 	InvalidMessage   = `Please enter a valid command!! Refer to !help for available command.`
-	UnknownMessage   = `This bot does not respond to other things except for command!! 😎😎
+	UnknownMessage   = `This bot does not respond to other things except for command 😎😎
 	Please refer to !help command to use InfoQerja functionality.
-	Hope you enjoy this bot !!😊😊
+	Hope you enjoy this bot 😊😊
 	- Joseph Salimin 😍`
-	AddMessage      = `Please add a new job!!😍`
-	AddTitleMessage = `Please add a new job title!!😍`
-	ShowMessage     = `Showing all job listing saved here 😎😎`
+	AddMessage         = `Please add a new job 😍`
+	AddTitleMessage    = `Please add a new job title😍`
+	AddDescMessage     = `Please add the job description😍`
+	AddDateMessage     = `Pick job deadline date😍`
+	ShowMessage        = `Showing all job listing saved here 😎😎`
+	UnavailableMessage = `Please view this in Mobile Version`
+	ThankYouMessage    = `Thank you for adding job data 😎😎`
 )
 
 // Command code constant for refering to open public functionality for user to use
