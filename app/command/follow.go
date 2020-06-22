@@ -1,6 +1,7 @@
 package command
 
 import (
+	model "infoqerja-line/app/model"
 	constant "infoqerja-line/app/utils/constant"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -14,10 +15,20 @@ func (handler *Welcome) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.WelcomeMessage)}
 }
 
+// GetState : Method to get any state a certain command produce, if present
+func (handler *Welcome) GetState() (model.State, error) {
+	return nil, nil
+}
+
 // UnWelcome : A class to represent the part away user event
 type UnWelcome struct{}
 
 // GetReply : Method service for UnWelcome instance
 func (handler *UnWelcome) GetReply() []linebot.SendingMessage {
 	return []linebot.SendingMessage{linebot.NewTextMessage(constant.UnWelcomeMessage)}
+}
+
+// GetState : Method to get any state a certain command produce, if present
+func (handler *UnWelcome) GetState() (model.State, error) {
+	return nil, nil
 }
