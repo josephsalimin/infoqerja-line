@@ -13,7 +13,7 @@ type Help struct{}
 // GetReply : Method service for IncomingHelp instance
 func (handler *Help) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
-		"https://img.icons8.com/ios/50/000000/about.png", "Help", constant.HelpShortMessage,
+		"https://img.icons8.com/material-outlined/96/000000/advanced-search.png", "Help", constant.HelpShortMessage,
 		linebot.NewMessageAction("Help", "!help"),
 		linebot.NewMessageAction("Add Job", "!add"),
 		linebot.NewMessageAction("Show Job", "!show"),

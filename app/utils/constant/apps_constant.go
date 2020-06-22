@@ -18,7 +18,7 @@ const (
 	AddTitleMessage    = `Please add a new job title😍`
 	AddDescMessage     = `Please add the job description😍`
 	AddDateMessage     = `Pick job deadline date😍`
-	ShowMessage        = `Showing all job listing saved here 😎😎`
+	ShowMessageFail    = `Unable to show job listing saved. Please try again or contant the developer!!`
 	UnavailableMessage = `Please view this in Mobile Version`
 	ThankYouMessage    = `Thank you for adding job data 😎😎`
 )
