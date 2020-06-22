@@ -18,7 +18,7 @@ type AddDescState struct {
 // GetReply : Get the reply for next question
 func (state *AddDescState) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
-		"", "", constant.AddDateMessage,
+		"https://img.icons8.com/ios/50/000000/clock.png", "", constant.AddDateMessage,
 		linebot.NewDatetimePickerAction("Pick a date", "DATE", "date", "", "", ""),
 	)
 

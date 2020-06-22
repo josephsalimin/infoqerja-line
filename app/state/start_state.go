@@ -54,18 +54,14 @@ func (state *StartState) Process() error {
 	user = model.NewUserData(state.Data.SourceID, constant.NoState)
 	if err = user.Create(); err != nil {
 		log.Print(err)
-		log.Print("Creating New User")
 		return err
 	}
 	// Creating new job
 	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {
 		log.Print(err)
-		log.Print("Creating New Job")
 		return err
 	}
-
 	return nil
-
 }
 
 // NextState : Proceed to the next state
