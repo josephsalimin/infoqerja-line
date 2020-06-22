@@ -6,6 +6,7 @@ const (
 	- !help		: to find out how to use InfoQerja
 	- !add		: to add job posting to InfoQerja
 	- !show		: to show job posting in InfoQerja`
+	HelpShortMessage = `Please click button below to refer to available command`
 	WelcomeMessage   = `Welcome to the InfoQerja Bot!!!💻💻`
 	UnWelcomeMessage = `Please contact us for future improvement!!`
 	InvalidMessage   = `Please enter a valid command!! Refer to !help for available command.`
