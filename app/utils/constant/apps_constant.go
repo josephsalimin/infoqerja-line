@@ -32,6 +32,13 @@ const (
 	AddCommandCode       = "!add"
 )
 
+// Constant representing event requested by user
+const (
+	DetailEvent = "@detail"
+	StatsEvent  = "@stats"
+	CancelEvent = "@cancel"
+)
+
 // Image Url constant configuration
 const (
 	SearchImageURL = "https://img.icons8.com/material-outlined/1000/000000/advanced-search.png"

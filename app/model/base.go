@@ -1,6 +1,8 @@
 package model
 
-import "github.com/line/line-bot-sdk-go/linebot"
+import (
+	"github.com/line/line-bot-sdk-go/linebot"
+)
 
 // BaseData : the basec structure for data (DTO) in the event layer
 type BaseData struct {
@@ -43,4 +45,11 @@ type State interface {
 	Parser
 	Processor
 	Next
+}
+
+// Event : An interface to represent certain event coming to the line bot
+type Event interface {
+	Replier
+	Parser
+	Processor
 }

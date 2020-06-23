@@ -6,13 +6,11 @@ import (
 	"infoqerja-line/app/utils"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // LineBotHandler will handle all line's callback request
@@ -54,6 +52,8 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if util.IsCommandValid(message.Text) {
 					customCommandHandler(service, message.Text)
+
+					// add else if -> is valid event; do the event using customEventHandler
 				} else {
 					if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 						constant.SourceID: utils.GetSource(*event),
@@ -82,17 +82,15 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					customJobHandler(service, constant.Error)
 				}
 			} else if strings.Contains(postback, constant.JobIDData) {
-				id, err := primitive.ObjectIDFromHex(strings.Split(postback, "|")[1])
-				log.Printf("ID data : %+v\n", id)
-
-				job, err := (&util.JobReader{}).ReadOne(bson.M{
-					"_id": id,
-				})
-				if err != nil {
-					log.Print(err)
-				} else {
-					log.Printf("Job data : %+v\n", job)
-				}
+				// id, _ := primitive.ObjectIDFromHex(strings.Split(postback, "|")[1])
+				// // job, err := (&util.JobReader{}).ReadOne(bson.M{
+				// // 	"_id": id, // getting the data based on ID
+				// // })
+				// // if err != nil {
+				// // 	log.Print(err)
+				// // } else {
+				// // 	log.Printf("Job data : %+v\n", job)
+				// // } --> this is the way to get the object ID of current event, make use of it correctly
 			}
 		}
 	}
@@ -100,7 +98,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 
 // Private Method
 func customCommandHandler(service *iql.Service, text string) {
-	finder := &iql.Finder{
+	finder := &iql.CommandConstant{
 		Command: text,
 	}
 	iql.HandleIncomingCommand(service, finder)
@@ -108,8 +106,15 @@ func customCommandHandler(service *iql.Service, text string) {
 
 // Private Method
 func customJobHandler(service *iql.Service, currState string) {
-	finder := &iql.JobState{
+	finder := &iql.StateConstant{
 		State: currState,
 	}
 	iql.HandleIncomingJob(service, finder)
+}
+
+func customEventHandler(service *iql.Service, event string) {
+	finder := &iql.EventConstant{
+		Event: event,
+	}
+	iql.HandleIncomingEvent(service, finder)
 }
