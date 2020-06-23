@@ -12,6 +12,7 @@ import (
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // LineBotHandler will handle all line's callback request
@@ -81,8 +82,9 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					customJobHandler(service, constant.Error)
 				}
 			} else if strings.Contains(postback, constant.JobIDData) {
-				id := strings.Split(postback, "|")[1]
+				id, err := primitive.ObjectIDFromHex(strings.Split(postback, "|")[1])
 				log.Printf("ID data : %+v\n", id)
+
 				job, err := (&util.JobReader{}).ReadOne(bson.M{
 					"_id": id,
 				})
