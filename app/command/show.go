@@ -27,7 +27,7 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 	for _, job := range jobs {
 		holder = append(holder, linebot.NewCarouselColumn(
 			constant.ResumeImageURL, job.Title, job.Deadline.Format(constant.DateFormatLayout),
-			linebot.NewPostbackAction("View Details", constant.JobIDData+"|"+job.ID.String(), "", ""),
+			linebot.NewPostbackAction("View Details", constant.JobIDData+"|"+job.ID.Hex(), "", ""),
 		))
 	}
 
