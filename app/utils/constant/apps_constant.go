@@ -31,3 +31,17 @@ const (
 	HelpCommandCode      = "!help"
 	AddCommandCode       = "!add"
 )
+
+// Image Url constant configuration
+const (
+	SearchImageURL = "https://img.icons8.com/material-outlined/24/000000/advanced-search.png"
+	AlertImageURL  = "https://img.icons8.com/material-outlined/24/000000/warning-shield.png"
+	ResumeImageURL = "https://img.icons8.com/material-outlined/24/000000/parse-resume.png"
+	ClockImageURL  = "https://img.icons8.com/material-outlined/24/000000/clock.png"
+)
+
+// Data definition for postback action
+const (
+	DateData  = "DATE"
+	JobIDData = "JOB-ID"
+)

@@ -6,6 +6,7 @@ import (
 	"infoqerja-line/app/utils"
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
+	"log"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -69,7 +70,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypePostback:
 			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
 			postback := event.Postback.Data
-			if postback == "DATE" {
+			if postback == constant.DateData {
 				if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 					constant.SourceID: utils.GetSource(*event),
 					constant.State:    constant.WaitDateInput,
@@ -78,6 +79,9 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				} else {
 					customJobHandler(service, constant.Error)
 				}
+			} else if postback == constant.JobIDData {
+				// view data
+				log.Printf("Postback JobID : %v\n", event.Postback.Data)
 			}
 		}
 	}

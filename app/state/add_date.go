@@ -65,7 +65,8 @@ func (state *AddDateState) NextState() error {
 		constant.SourceID: state.Data.SourceID,
 	})
 
-	if err := user.Delete(); err != nil {
+	user.State = constant.NoState
+	if err := user.Update(); err != nil {
 		log.Print(err)
 		return err
 	}

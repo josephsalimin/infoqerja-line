@@ -16,7 +16,6 @@ type Show struct{}
 
 // GetReply : Method service for IncomingHelp instance
 func (handler *Show) GetReply() []linebot.SendingMessage {
-	imageURL := "https://img.icons8.com/material-outlined/96/000000/parse-resume.png"
 
 	// template : carousel
 	jobs, err := handler.GetData()
@@ -27,8 +26,8 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 	var holder []*linebot.CarouselColumn
 	for _, job := range jobs {
 		holder = append(holder, linebot.NewCarouselColumn(
-			imageURL, job.Title, job.Description,
-			linebot.NewPostbackAction("Say hello", "hello こんにちは", "", ""),
+			constant.ResumeImageURL, job.Title, job.Deadline.Format(constant.DateFormatLayout),
+			linebot.NewPostbackAction("View Details", constant.JobIDData, job.ID.String(), ""),
 		))
 	}
 

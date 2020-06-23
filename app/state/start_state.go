@@ -35,8 +35,9 @@ func (state *StartState) Process() error {
 	})
 
 	if user != nil { // if no user data detected
-		// if user data detected, please check the state first
-		if err := user.Delete(); err != nil {
+		// if user data detected, please kindly update the state first
+		user.State = constant.NoState
+		if err := user.Update(); err != nil {
 			log.Print(err)
 			return err
 		}
@@ -50,11 +51,12 @@ func (state *StartState) Process() error {
 				log.Print(err)
 			}
 		}
-	}
-	user = model.NewUserData(state.Data.SourceID, constant.NoState)
-	if err = user.Create(); err != nil {
-		log.Print(err)
-		return err
+	} else {
+		user = model.NewUserData(state.Data.SourceID, constant.NoState)
+		if err = user.Create(); err != nil {
+			log.Print(err)
+			return err
+		}
 	}
 	// Creating new job
 	if err = model.NewJob("", "", "", false, state.Data.SourceID).Create(); err != nil {

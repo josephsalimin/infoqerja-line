@@ -18,8 +18,8 @@ type AddDescState struct {
 // GetReply : Get the reply for next question
 func (state *AddDescState) GetReply() []linebot.SendingMessage {
 	template := linebot.NewButtonsTemplate(
-		"https://img.icons8.com/ios/50/000000/clock.png", "", constant.AddDateMessage,
-		linebot.NewDatetimePickerAction("Pick a date", "DATE", "date", "", "", ""),
+		constant.ClockImageURL, "", constant.AddDateMessage,
+		linebot.NewDatetimePickerAction("Pick a date", constant.DateData, "date", "", "", ""),
 	)
 
 	return []linebot.SendingMessage{linebot.NewTemplateMessage(constant.UnavailableMessage, template)}
