@@ -25,7 +25,7 @@ func (state *AddDateState) GetReply() []linebot.SendingMessage {
 func (state *AddDateState) Parse(event linebot.Event) error {
 	state.Data = model.BaseData{
 		SourceID: util.GetSource(event),
-		Input:    util.GetData(event.Message),
+		Input:    event.Postback.Params.Date,
 	}
 
 	return nil

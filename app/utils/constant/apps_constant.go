@@ -34,10 +34,10 @@ const (
 
 // Image Url constant configuration
 const (
-	SearchImageURL = "https://img.icons8.com/material-outlined/24/000000/advanced-search.png"
-	AlertImageURL  = "https://img.icons8.com/material-outlined/24/000000/warning-shield.png"
-	ResumeImageURL = "https://img.icons8.com/material-outlined/24/000000/parse-resume.png"
-	ClockImageURL  = "https://img.icons8.com/material-outlined/24/000000/clock.png"
+	SearchImageURL = "https://img.icons8.com/material-outlined/1000/000000/advanced-search.png"
+	AlertImageURL  = "https://img.icons8.com/material-outlined/1000/000000/warning-shield.png"
+	ResumeImageURL = "https://img.icons8.com/material-outlined/1000/000000/parse-resume.png"
+	ClockImageURL  = "https://img.icons8.com/material-outlined/1000/000000/clock.png"
 )
 
 // Data definition for postback action

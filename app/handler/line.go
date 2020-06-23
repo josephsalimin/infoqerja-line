@@ -8,6 +8,7 @@ import (
 	constant "infoqerja-line/app/utils/constant"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"go.mongodb.org/mongo-driver/bson"
@@ -79,7 +80,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				} else {
 					customJobHandler(service, constant.Error)
 				}
-			} else if postback == constant.JobIDData {
+			} else if strings.Contains(postback, constant.JobIDData) {
 				// view data
 				log.Printf("Postback JobID : %v\n", event.Postback.Data)
 			}
