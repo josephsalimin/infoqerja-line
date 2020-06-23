@@ -81,8 +81,16 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					customJobHandler(service, constant.Error)
 				}
 			} else if strings.Contains(postback, constant.JobIDData) {
-				// view data
-				log.Printf("Postback JobID : %v\n", event.Postback.Data)
+				id := strings.Split(postback, "|")[1]
+				log.Printf("ID data : %+v\n", id)
+				job, err := (&util.JobReader{}).ReadOne(bson.M{
+					"_id": id,
+				})
+				if err != nil {
+					log.Print(err)
+				} else {
+					log.Printf("Job data : %+v\n", job)
+				}
 			}
 		}
 	}
