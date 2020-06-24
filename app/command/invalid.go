@@ -14,7 +14,7 @@ type Invalid struct{}
 func (handler *Invalid) GetReply() []linebot.SendingMessage {
 
 	template := linebot.NewButtonsTemplate(
-		"https://img.icons8.com/ios/50/000000/warning-shield.png", "Invalid Command", constant.HelpShortMessage,
+		constant.AlertImageURL, "Invalid Command", constant.HelpShortMessage,
 		linebot.NewMessageAction("Click Me", "!help"),
 	)
 

@@ -7,6 +7,7 @@ import (
 	util "infoqerja-line/app/utils"
 	constant "infoqerja-line/app/utils/constant"
 	"net/http"
+	"strings"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"go.mongodb.org/mongo-driver/bson"
@@ -51,6 +52,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if util.IsCommandValid(message.Text) {
 					customCommandHandler(service, message.Text)
+					// add else if -> is valid event; do the event using customEventHandler, for future upgrade on the code
 				} else {
 					if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 						constant.SourceID: utils.GetSource(*event),
@@ -69,7 +71,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 		case linebot.EventTypePostback:
 			// checking user data -> get the state, and then verify it, create the CurrState struct data -> input into job sevice, check error, etc :)
 			postback := event.Postback.Data
-			if postback == "DATE" {
+			if postback == constant.DateData {
 				if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 					constant.SourceID: utils.GetSource(*event),
 					constant.State:    constant.WaitDateInput,
@@ -78,6 +80,8 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 				} else {
 					customJobHandler(service, constant.Error)
 				}
+			} else if strings.Contains(postback, constant.JobIDData) {
+				customEventHandler(service, constant.DetailEvent)
 			}
 		}
 	}
@@ -85,7 +89,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 
 // Private Method
 func customCommandHandler(service *iql.Service, text string) {
-	finder := &iql.Finder{
+	finder := &iql.CommandConstant{
 		Command: text,
 	}
 	iql.HandleIncomingCommand(service, finder)
@@ -93,8 +97,15 @@ func customCommandHandler(service *iql.Service, text string) {
 
 // Private Method
 func customJobHandler(service *iql.Service, currState string) {
-	finder := &iql.JobState{
+	finder := &iql.StateConstant{
 		State: currState,
 	}
 	iql.HandleIncomingJob(service, finder)
+}
+
+func customEventHandler(service *iql.Service, event string) {
+	finder := &iql.EventConstant{
+		Event: event,
+	}
+	iql.HandleIncomingEvent(service, finder)
 }

@@ -18,9 +18,10 @@ const (
 	AddTitleMessage    = `Please add a new job title😍`
 	AddDescMessage     = `Please add the job description😍`
 	AddDateMessage     = `Pick job deadline date😍`
-	ShowMessage        = `Showing all job listing saved here 😎😎`
+	ShowMessageFail    = `Unable to show job listing saved. Please try again or contant the developer!!`
 	UnavailableMessage = `Please view this in Mobile Version`
 	ThankYouMessage    = `Thank you for adding job data 😎😎`
+	NoDataMessage      = `No Jobs Currently Available. Keep searching for it😎😎`
 )
 
 // Command code constant for refering to open public functionality for user to use
@@ -30,4 +31,25 @@ const (
 	ShowCommandCode      = "!show"
 	HelpCommandCode      = "!help"
 	AddCommandCode       = "!add"
+)
+
+// Constant representing event requested by user
+const (
+	DetailEvent = "@detail"
+	StatsEvent  = "@stats"
+	CancelEvent = "@cancel"
+)
+
+// Image Url constant configuration
+const (
+	SearchImageURL = "https://img.icons8.com/material-outlined/1000/000000/advanced-search.png"
+	AlertImageURL  = "https://img.icons8.com/material-outlined/1000/000000/warning-shield.png"
+	ResumeImageURL = "https://img.icons8.com/material-outlined/1000/000000/parse-resume.png"
+	ClockImageURL  = "https://img.icons8.com/material-outlined/1000/000000/clock.png"
+)
+
+// Data definition for postback action
+const (
+	DateData  = "DATE"
+	JobIDData = "JOB-ID"
 )

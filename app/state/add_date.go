@@ -25,7 +25,7 @@ func (state *AddDateState) GetReply() []linebot.SendingMessage {
 func (state *AddDateState) Parse(event linebot.Event) error {
 	state.Data = model.BaseData{
 		SourceID: util.GetSource(event),
-		Input:    util.GetData(event.Message),
+		Input:    event.Postback.Params.Date,
 	}
 
 	return nil
@@ -65,7 +65,8 @@ func (state *AddDateState) NextState() error {
 		constant.SourceID: state.Data.SourceID,
 	})
 
-	if err := user.Delete(); err != nil {
+	user.State = constant.NoState
+	if err := user.Update(); err != nil {
 		log.Print(err)
 		return err
 	}

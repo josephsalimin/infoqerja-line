@@ -2,6 +2,7 @@ package line
 
 import (
 	iqq "infoqerja-line/app/command"
+	event "infoqerja-line/app/event"
 	"infoqerja-line/app/model"
 	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils/constant"
@@ -16,15 +17,14 @@ type (
 	FinderCommand interface {
 		GetCommand() model.Command
 	}
-
-	// Finder : A service for searching something
-	Finder struct {
+	// CommandConstant : A service for searching something
+	CommandConstant struct {
 		Command string
 	}
 )
 
 // GetCommand : get the type of command from user inputs
-func (finder *Finder) GetCommand() model.Command {
+func (finder *CommandConstant) GetCommand() model.Command {
 	co := strings.TrimSpace(finder.Command)
 	switch co {
 	case constant.HelpCommandCode:
@@ -43,20 +43,18 @@ func (finder *Finder) GetCommand() model.Command {
 }
 
 type (
-
 	// FinderState : interface of searching job service
 	FinderState interface {
 		GetState() model.State
 	}
-
-	// JobState : struct representing current state of user
-	JobState struct {
+	// StateConstant : struct representing current state of user
+	StateConstant struct {
 		State string
 	}
 )
 
 // GetState : get the type of state when waiting for user inputs
-func (job *JobState) GetState() model.State {
+func (job *StateConstant) GetState() model.State {
 	switch job.State {
 	case constant.WaitDateInput:
 		return &state.AddDateState{}
@@ -68,6 +66,28 @@ func (job *JobState) GetState() model.State {
 		return &state.StartState{}
 	default:
 		return &state.ErrorState{}
+	}
+}
+
+type (
+	// FinderEvent : interface for searching event service
+	FinderEvent interface {
+		GetEvent() model.Event
+	}
+
+	// EventConstant : struct representing current event requested by user
+	EventConstant struct {
+		Event string
+	}
+)
+
+// GetEvent : get the type of event requested by user
+func (eve *EventConstant) GetEvent() model.Event {
+	switch eve.Event {
+	case constant.DetailEvent:
+		return &event.Detail{}
+	default:
+		return nil
 	}
 }
 
@@ -87,7 +107,12 @@ type Inputer interface {
 	InputService(state model.State) error
 }
 
-// CommandService : Method service for IncomingAction instance; the service that were going to be injected is the Command interface service
+// EventHandler : interface for injecting event service
+type EventHandler interface {
+	EventService(event model.Event) error
+}
+
+// CommandService : Method service for Command instance; the service that were going to be injected is the Command interface service
 func (service *Service) CommandService(command model.Command) error {
 	state, err := command.GetState()
 	if state != nil {
@@ -97,7 +122,7 @@ func (service *Service) CommandService(command model.Command) error {
 	return err
 }
 
-// InputService : Method service for IncomingJob instance; the service that were going to be injected is the Job interface service
+// InputService : Method service for State instance; the service that were going to be injected is the State interface service
 func (service *Service) InputService(state model.State) error {
 	if err := state.Parse(service.Event); err != nil {
 		log.Print(err)
@@ -116,6 +141,22 @@ func (service *Service) InputService(state model.State) error {
 	return err
 }
 
+// EventService : Method service for Event instance; the service that werge going to be injected is the Event interface service
+func (service *Service) EventService(event model.Event) error {
+	if err := event.Parse(service.Event); err != nil {
+		log.Print(err)
+		return err
+	}
+
+	if err := event.Process(); err != nil {
+		log.Print(err)
+		return err
+	}
+
+	_, err := service.Bot.ReplyMessage(service.Event.ReplyToken, event.GetReply()...).Do()
+	return err
+}
+
 // HandleIncomingCommand : Handler for any incoming event that based on EventTypeMessage
 func HandleIncomingCommand(service Commander, finder FinderCommand) {
 	command := finder.GetCommand()
@@ -131,10 +172,20 @@ func HandleIncomingJob(service Inputer, finder FinderState) {
 	job := finder.GetState()
 	if err := service.InputService(job); err != nil {
 		log.Print(err)
-		finderLocal := &JobState{
+		finderLocal := &StateConstant{
 			State: constant.Error,
 		}
 		errJob := finderLocal.GetState() // handling error
 		_ = service.InputService(errJob)
+	}
+}
+
+// HandleIncomingEvent : Handler for any incoming event that based on EventTypeMessage and EventTypePostback
+func HandleIncomingEvent(service EventHandler, finder FinderEvent) {
+	event := finder.GetEvent()
+	if event != nil {
+		if err := service.EventService(event); err != nil {
+			log.Print(err)
+		}
 	}
 }
