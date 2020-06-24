@@ -21,6 +21,7 @@ const (
 	ShowMessageFail    = `Unable to show job listing saved. Please try again or contant the developer!!`
 	UnavailableMessage = `Please view this in Mobile Version`
 	ThankYouMessage    = `Thank you for adding job data 😎😎`
+	NoDataMessage      = `No Jobs Currently Available. Keep searching for it😎😎`
 )
 
 // Command code constant for refering to open public functionality for user to use
