@@ -2,7 +2,7 @@ package line
 
 import (
 	iqq "infoqerja-line/app/command"
-	"infoqerja-line/app/event"
+	event "infoqerja-line/app/event"
 	"infoqerja-line/app/model"
 	state "infoqerja-line/app/state"
 	"infoqerja-line/app/utils/constant"
@@ -81,6 +81,7 @@ type (
 	}
 )
 
+// GetEvent : get the type of event requested by user
 func (eve *EventConstant) GetEvent() model.Event {
 	switch eve.Event {
 	case constant.DetailEvent:

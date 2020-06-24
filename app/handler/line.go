@@ -82,15 +82,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					customJobHandler(service, constant.Error)
 				}
 			} else if strings.Contains(postback, constant.JobIDData) {
-				// id, _ := primitive.ObjectIDFromHex(strings.Split(postback, "|")[1])
-				// // job, err := (&util.JobReader{}).ReadOne(bson.M{
-				// // 	"_id": id, // getting the data based on ID
-				// // })
-				// // if err != nil {
-				// // 	log.Print(err)
-				// // } else {
-				// // 	log.Printf("Job data : %+v\n", job)
-				// // } --> this is the way to get the object ID of current event, make use of it correctly
+				// don't do anything for now
 			}
 		}
 	}
