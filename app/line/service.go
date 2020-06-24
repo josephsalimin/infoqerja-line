@@ -86,10 +86,6 @@ func (eve *EventConstant) GetEvent() model.Event {
 	switch eve.Event {
 	case constant.DetailEvent:
 		return &event.Detail{}
-	case constant.CancelEvent:
-		return &event.Cancel{}
-	case constant.StatsEvent:
-		return &event.Stats{}
 	default:
 		return nil
 	}
