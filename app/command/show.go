@@ -22,92 +22,9 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 		return []linebot.SendingMessage{linebot.NewTextMessage(constant.ShowMessageFail)}
 	}
 
-	// var holder []*linebot.CarouselColumn
-	// for _, job := range jobs {
-	// 	holder = append(holder, linebot.NewCarouselColumn(
-	// 		constant.ResumeImageURL, job.Title, job.Deadline.Format(constant.DateFormatLayout),
-	// 		linebot.NewPostbackAction("View Details", constant.JobIDData+"|"+job.ID.Hex(), "", ""),
-	// 	))
-	// }
-
 	var placeholder []*linebot.BubbleContainer
 	for _, job := range jobs {
-		placeholder = append(placeholder, &linebot.BubbleContainer{
-			Type: linebot.FlexContainerTypeBubble,
-			Body: &linebot.BoxComponent{
-				Type:   linebot.FlexComponentTypeBox,
-				Layout: linebot.FlexBoxLayoutTypeVertical,
-				Contents: []linebot.FlexComponent{
-					&linebot.TextComponent{
-						Type:  linebot.FlexComponentTypeText,
-						Text:  "InfoQerja",
-						Color: "#1DB446",
-						Size:  "md",
-					},
-					&linebot.TextComponent{
-						Type:   linebot.FlexComponentTypeText,
-						Text:   job.Title,
-						Weight: "bold",
-						Size:   "xxl",
-						Margin: "md",
-					},
-					&linebot.BoxComponent{
-						Type:   linebot.FlexComponentTypeBox,
-						Layout: linebot.FlexBoxLayoutTypeHorizontal,
-						Contents: []linebot.FlexComponent{
-							&linebot.TextComponent{
-								Type:  linebot.FlexComponentTypeText,
-								Text:  "Job ID : ",
-								Size:  "xs",
-								Color: "#aaaaaa",
-							},
-							&linebot.TextComponent{
-								Type:  linebot.FlexComponentTypeText,
-								Text:  job.ID.Hex(),
-								Size:  "xs",
-								Color: "#aaaaaa",
-								Align: "end",
-							},
-						},
-					},
-					&linebot.BoxComponent{
-						Type:    linebot.FlexComponentTypeBox,
-						Layout:  linebot.FlexBoxLayoutTypeVertical,
-						Margin:  "xxl",
-						Spacing: "sm",
-						Contents: []linebot.FlexComponent{
-							&linebot.BoxComponent{
-								Type:   linebot.FlexComponentTypeBox,
-								Layout: linebot.FlexBoxLayoutTypeHorizontal,
-								Contents: []linebot.FlexComponent{
-									&linebot.TextComponent{
-										Type:  linebot.FlexComponentTypeText,
-										Text:  "Deadline Date : ",
-										Size:  "sm",
-										Color: "#555555",
-									},
-									&linebot.TextComponent{
-										Type:  linebot.FlexComponentTypeText,
-										Text:  job.Deadline.Format(constant.DateFormatLayout),
-										Size:  "sm",
-										Color: "#555555",
-										Align: "end",
-									},
-								},
-							},
-							&linebot.SeparatorComponent{
-								Type:   linebot.FlexComponentTypeSeparator,
-								Margin: "xxl",
-							},
-						},
-					},
-					&linebot.ButtonComponent{
-						Type:   linebot.FlexComponentTypeButton,
-						Action: linebot.NewPostbackAction("View Details", constant.JobIDData+"|"+job.ID.Hex(), "", ""),
-					},
-				},
-			},
-		})
+		placeholder = append(placeholder, getTemplate(job))
 	}
 	contents := &linebot.CarouselContainer{
 		Type:     linebot.FlexContainerTypeCarousel,
@@ -135,4 +52,85 @@ func (handler *Show) GetData() ([]model.Job, error) {
 // GetState : Method to get any state a certain command produce, if present
 func (handler *Show) GetState() (model.State, error) {
 	return nil, nil
+}
+
+func getTemplate(job model.Job) *linebot.BubbleContainer {
+	return &linebot.BubbleContainer{
+		Size:      "micro",
+		Direction: "rtl",
+		Type:      linebot.FlexContainerTypeBubble,
+		Body: &linebot.BoxComponent{
+			Type:   linebot.FlexComponentTypeBox,
+			Layout: linebot.FlexBoxLayoutTypeVertical,
+			Contents: []linebot.FlexComponent{
+				&linebot.TextComponent{
+					Type:  linebot.FlexComponentTypeText,
+					Text:  "InfoQerja",
+					Color: "#1DB446",
+					Size:  "md",
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   job.Title,
+					Weight: "bold",
+					Size:   "xxl",
+					Margin: "md",
+				},
+				&linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeHorizontal,
+					Contents: []linebot.FlexComponent{
+						&linebot.TextComponent{
+							Type:  linebot.FlexComponentTypeText,
+							Text:  "Job ID : ",
+							Size:  "xs",
+							Color: "#aaaaaa",
+						},
+						&linebot.TextComponent{
+							Type:  linebot.FlexComponentTypeText,
+							Text:  job.ID.Hex(),
+							Size:  "xs",
+							Color: "#aaaaaa",
+							Align: "end",
+						},
+					},
+				},
+				&linebot.BoxComponent{
+					Type:    linebot.FlexComponentTypeBox,
+					Layout:  linebot.FlexBoxLayoutTypeVertical,
+					Margin:  "xxl",
+					Spacing: "sm",
+					Contents: []linebot.FlexComponent{
+						&linebot.BoxComponent{
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeHorizontal,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  "Deadline Date : ",
+									Size:  "sm",
+									Color: "#555555",
+								},
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  job.Deadline.Format(constant.DateFormatLayout),
+									Size:  "sm",
+									Color: "#555555",
+									Align: "end",
+								},
+							},
+						},
+						&linebot.SeparatorComponent{
+							Type:   linebot.FlexComponentTypeSeparator,
+							Margin: "xxl",
+						},
+					},
+				},
+				&linebot.ButtonComponent{
+					Type:   linebot.FlexComponentTypeButton,
+					Action: linebot.NewPostbackAction("View Details", constant.JobIDData+"|"+job.ID.Hex(), "", ""),
+				},
+			},
+		},
+	}
 }
