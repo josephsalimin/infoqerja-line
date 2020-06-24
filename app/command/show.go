@@ -19,11 +19,11 @@ func (handler *Show) GetReply() []linebot.SendingMessage {
 
 	jobs, err := handler.GetData()
 	if err != nil {
-		return []linebot.SendingMessage{linebot.NewTextMessage(constant.NoDataMessage)}
+		return []linebot.SendingMessage{linebot.NewTextMessage(constant.InvalidMessage)}
 	}
 
 	if len(jobs) == 0 {
-		return []linebot.SendingMessage{linebot.NewTextMessage(constant.WelcomeMessage)}
+		return []linebot.SendingMessage{linebot.NewTextMessage(constant.NoDataMessage)}
 	}
 
 	var placeholder []*linebot.BubbleContainer
