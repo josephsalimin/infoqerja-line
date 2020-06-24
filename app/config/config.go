@@ -14,6 +14,7 @@ type Config struct {
 	Port          int    `mapstructure:"PORT"`
 	ChannelSecret string `mapstructure:"CHANNEL_SECRET"`
 	ChannelToken  string `mapstructure:"CHANNEL_TOKEN"`
+	DatabaseURI   string `mapstructure:"DATABASE_URI"`
 }
 
 // Reader is interface for global application config
