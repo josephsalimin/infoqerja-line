@@ -81,7 +81,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 					customJobHandler(service, constant.Error)
 				}
 			} else if strings.Contains(postback, constant.JobIDData) {
-				// don't do anything for now
+				customEventHandler(service, constant.DetailEvent)
 			}
 		}
 	}

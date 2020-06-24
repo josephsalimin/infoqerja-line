@@ -3,7 +3,6 @@ package event
 import (
 	"infoqerja-line/app/model"
 	util "infoqerja-line/app/utils"
-	"infoqerja-line/app/utils/constant"
 	"log"
 	"strings"
 
@@ -21,29 +20,7 @@ type Detail struct {
 // GetReply : Method service for Detail Event
 func (handler *Detail) GetReply() []linebot.SendingMessage {
 
-	// template := linebot.NewButtonsTemplate(
-	// 	constant.AlertImageURL, "Invalid Command", constant.HelpShortMessage,
-	// 	linebot.NewMessageAction("Click Me", "!help"),
-	// )
-
-	contents := &linebot.BubbleContainer{
-		Type: linebot.FlexContainerTypeBubble,
-		Body: &linebot.BoxComponent{
-			Type:   linebot.FlexComponentTypeBox,
-			Layout: linebot.FlexBoxLayoutTypeHorizontal,
-			Contents: []linebot.FlexComponent{
-				&linebot.TextComponent{
-					Type: linebot.FlexComponentTypeText,
-					Text: "Hello,",
-				},
-				&linebot.TextComponent{
-					Type: linebot.FlexComponentTypeText,
-					Text: "World!",
-				},
-			},
-		},
-	}
-	return []linebot.SendingMessage{linebot.NewFlexMessage(constant.InvalidMessage, contents)}
+	return []linebot.SendingMessage{linebot.NewTextMessage(handler.job.Description)}
 }
 
 // Parse : Method for parsing data needed for current event
