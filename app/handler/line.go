@@ -52,8 +52,7 @@ func (h LineBotHandler) Callback(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				if util.IsCommandValid(message.Text) {
 					customCommandHandler(service, message.Text)
-
-					// add else if -> is valid event; do the event using customEventHandler
+					// add else if -> is valid event; do the event using customEventHandler, for future upgrade on the code
 				} else {
 					if user, err := (&util.UserDataReader{}).ReadOne(bson.M{
 						constant.SourceID: utils.GetSource(*event),

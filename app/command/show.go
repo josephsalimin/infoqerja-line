@@ -56,9 +56,8 @@ func (handler *Show) GetState() (model.State, error) {
 
 func getTemplate(job model.Job) *linebot.BubbleContainer {
 	return &linebot.BubbleContainer{
-		Size:      "micro",
-		Direction: "rtl",
-		Type:      linebot.FlexContainerTypeBubble,
+		Size: "kilo",
+		Type: linebot.FlexContainerTypeBubble,
 		Body: &linebot.BoxComponent{
 			Type:   linebot.FlexComponentTypeBox,
 			Layout: linebot.FlexBoxLayoutTypeVertical,
